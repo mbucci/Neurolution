@@ -37,7 +37,8 @@ public class Problem
         try {
             BufferedReader reader = new BufferedReader(new FileReader(f));
             double[] maxValues = null;
-            String line;
+            String line = null;
+
             String pattern = "(\"[a-z,A-Z]+\")";
             
             while ((line = reader.readLine()) != null) {
@@ -54,15 +55,15 @@ public class Problem
 
                 StringTokenizer tokens = new StringTokenizer(line, ";", true);
                 int count = 0;
+                int lastToken = tokens.countTokens() - 1;
                 while (tokens.hasMoreTokens()) {
                     double temp = Double.parseDouble(tokens.nextToken());
                     if (temp > maxValues[count]) maxValues[count] = temp;
-                    data.add(temp);
+                    
+                    if (count == lastToken) quality = (int) temp;
+                    else data.add(temp);
                     count++;
                 }
-
-                quality = data.get(data.size() - 1).intValue();
-                data.remove(data.size() - 1);
 
                 Clause newClause = new Clause(quality, data);
                 this.problem.add(newClause);

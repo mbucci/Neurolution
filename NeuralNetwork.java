@@ -13,29 +13,24 @@ public class NeuralNetwork extends Perceptron
 {   
     //Perceptron constants
     private static final double SIGMOID_CONSTANT = 0.0;
-    private static final double WEIGHT_HIGH = 0.3;
-    private static final double WEIGHT_OFFSET = WEIGHT_HIGH / 2.0;
     private static final int OUT_NODES = 10;
 
-    //Algorithm specific variables
-    private int inputNodes;
-    
-    //Keeps track of performance
-    private int numCorrect;
+    private int inputNodes;       //Algorithm specific variables
+    private int numCorrect;       //Keeps track of performance
     
     /**
      * Constructor
      */
-    public NeuralNetwork(int numInputs) {
-        this(numInputs, null);
+    public NeuralNetwork(int numAttr) {
+        this(numAttr, null);
     }
     
     //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
-    public NeuralNetwork(int numInputs, double[] initialWeights) {
+    public NeuralNetwork(int numAttr, double[] initialWeights) {
         super();
-        this.inputNodes = numInputs;
-        if (initialWeights == null) super.initWeights(numInputs, OUT_NODES);
-        else super.initWeights(numInputs, OUT_NODES, initialWeights);
+        this.inputNodes = (int) Math.pow(numAttr, 2);
+        if (initialWeights == null) super.initWeights(this.inputNodes, OUT_NODES);
+        else super.initWeights(this.inputNodes, OUT_NODES, initialWeights);
     }
     
     
@@ -54,10 +49,13 @@ public class NeuralNetwork extends Perceptron
             for (int oID = 0; oID < OUT_NODES; oID++) {
                 
                 //**********Calculate sum of weighted inputs**********//
+                //Use a given attribute N (number of attribute) times
                 double weightedInputs = 0.0;
                 int iID = 0;
                 for (Double val : temp.getAttributes()) {
-                    weightedInputs += super.getWeightedInput(iID, oID, val);
+                    for (int i = 0; i < prob.getNumAttributes(); i++) {
+                        weightedInputs += super.getWeightedInput(iID + i, oID, val);
+                    } 
                     iID++;
                 }
                 
