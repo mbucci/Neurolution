@@ -30,7 +30,7 @@ public class NeuralNetwork extends Perceptron
         this(numInputs, null);
     }
     
-    //Maintain N input nodes for each attribute to increase diversity
+    //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
     public NeuralNetwork(int numInputs, double[] initialWeights) {
         super();
         this.inputNodes = numInputs;
