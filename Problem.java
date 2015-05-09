@@ -86,7 +86,14 @@ public class Problem
 
 
                 for (int j = 0; j < this.numAttributes; j++) {
-                    double newValue  = temp.getAttributes().get(j) / maxValues[j];
+                    double newValue;
+                    if (temp.getAttributes().get(j) == 0.0 && maxValues[j] == 0.0) {
+                        newValue = 0.0;
+                    } else if (maxValues[j] == 0.0) {
+                        // Something's wrong
+                        System.out.println("ERROR");
+                        break;
+                    } else { newValue  = temp.getAttributes().get(j) / maxValues[j]; }
                     normedVal.add(newValue);
                 }
                 Clause upClause = new Clause(temp.getQuality(), normedVal);
