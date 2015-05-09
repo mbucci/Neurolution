@@ -39,29 +39,36 @@ public class Problem
             double[] maxValues = null;
             String line = null;
 
-            String pattern = "(\"[a-z,A-Z]+\")";
+            String pattern = "(\"[a-z,A-Z]\").*";
+
+            // reader.readLine();  // skip first line
             
             while ((line = reader.readLine()) != null) {
                 //Ignore any alpha lines
-                if (Pattern.matches(pattern, line)) {
-                    StringTokenizer attrTokens = new StringTokenizer(line, ";", true);
-                    this.numAttributes = attrTokens.countTokens();
+                if (line.matches(".*[a-zA-Z]+.*")) {
+                    StringTokenizer attrTokens = new StringTokenizer(line, ";", false);
+                    this.numAttributes = attrTokens.countTokens() - 1;
+
                     maxValues = new double[this.numAttributes];
                     continue; 
                 } 
-               
+
                 int quality = 0;
                 ArrayList<Double> data = new ArrayList<Double>();
 
-                StringTokenizer tokens = new StringTokenizer(line, ";", true);
+                StringTokenizer tokens = new StringTokenizer(line, ";", false);
                 int count = 0;
                 int lastToken = tokens.countTokens() - 1;
+
                 while (tokens.hasMoreTokens()) {
                     double temp = Double.parseDouble(tokens.nextToken());
-                    if (temp > maxValues[count]) maxValues[count] = temp;
                     
-                    if (count == lastToken) quality = (int) temp;
-                    else data.add(temp);
+                    if (count == lastToken) {
+                        quality = (int) temp;
+                    } else {
+                        if (temp > maxValues[count]) maxValues[count] = temp;
+                        data.add(temp);
+                    }
                     count++;
                 }
 
@@ -77,6 +84,7 @@ public class Problem
                 Clause temp = this.problem.get(i);
                 ArrayList<Double> normedVal = new ArrayList<Double>();
 
+
                 for (int j = 0; j < this.numAttributes; j++) {
                     double newValue  = temp.getAttributes().get(j) / maxValues[j];
                     normedVal.add(newValue);
@@ -90,7 +98,13 @@ public class Problem
             e.printStackTrace();
         }
     }
-    
+
+    public void print() {
+        for (Clause c : problem) {
+            c.print();
+            System.out.println("\n");
+        }
+    }    
     
     public int getNumProblems() { return this.numProblems; }
     public int getNumAttributes() { return this.numAttributes; }
