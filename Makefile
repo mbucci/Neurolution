@@ -6,7 +6,8 @@ JC = javac
 
 CLASSES = \
 	NeuralNetwork.java\
-	Perceptron.java\
+	Network.java\
+	Neurolution.java\
 	Edge.java\
 	Problem.java\
 	Clause.java

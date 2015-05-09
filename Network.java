@@ -10,7 +10,7 @@
 import java.util.*;
 
 
-public class NeurNet
+public class Network
 {
     private static final double WEIGHT_HIGH = 0.3;
     private static final double WEIGHT_OFF = 0.15;
@@ -104,13 +104,22 @@ public class NeurNet
     
     //Given an input node ID, output node ID and input value, calculates the weighted input for
     //that edge
-    public double getWeightedInput(int inID, int outID, double inVal) {
+    public double getWeightedInput(int inID, int outID, double inVal, String layer) {
         // bias node always has an input value of 1
         if (inID == this.biasNodeID) inVal = 1.0;
-        return getWeight(inID, outID) * inVal;
+        double weight;
+        if (layer.equals("hidden")) {
+            weight = getWeight(inID, outID, "hidden");
+        } else {
+            weight = getWeight(inID, outID, "output");
+        }
+        return weight * inVal;
     }
     
-    public double getWeight(int inID, int outID) {
-        return this.network.get(inID).get(outID).getWeight();
+    public double getWeight(int inID, int outID, String layer) {
+        if (layer.equals("hidden")) { return this.hiddenLayer.get(inID).get(outID).getWeight(); }
+        else { return this.outputLayer.get(inID).get(outID).getWeight(); }
     }
+
+    public int getNumHiddenNodes() { return this.numHiddenNodes; }
 }

@@ -29,6 +29,11 @@ public class Clause
         return ret.toString();
     }
 
+    public void print() {
+        System.out.println("Quality: " + this.quality);
+        System.out.println("Attr: " + this.attributes);
+    }
+
     public int getQuality() { return this.quality; }
     public int getNumAttributes() { return this.attributes.size(); }
     public ArrayList<Double> getAttributes() { return this.attributes; }

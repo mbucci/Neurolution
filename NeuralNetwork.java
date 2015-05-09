@@ -36,38 +36,51 @@ public class NeuralNetwork extends Network
     
     //Main function for NN. Runs perceptron NN on a given problem
     public int run(Problem prob) {
-        
+
         this.numCorrect = 0;
         ListIterator<Clause> lit = prob.getIterator();
         while (lit.hasNext()) {
             double[] target = new double[OUT_NODES];
-            double[] output = new double[OUT_NODES];
+            double[] outputHidden = new double[super.getNumHiddenNodes()];
+            double[] outputFinal = new double[OUT_NODES];
+            double[] attrError = new double[OUT_NODES];
             
             // Get next wine/attribute list frm problem, set the corresponding quality
             // index of the target output vector to 1
             Clause temp = lit.next();
             target[temp.getQuality()] = 1;
             
-            // For every output node, calculate the sum of the weighted inputs
+            // For every hidden layer node, calculate the sum of the weighted inputs
+            // @TODO change to 144? rn is twelve...
+            for (int hidID = 0; hidID < super.getNumHiddenNodes(); hidID++) {
 
-            for (int oID = 0; oID < OUT_NODES; oID++) {
-                
-                //**********Calculate sum of weighted inputs**********//
-                //Use a given attribute N (number of attribute) times
+                // Calculate sum of weighted inputs for every hidden node
                 double weightedInputs = 0.0;
                 int iID = 0;
                 for (Double val : temp.getAttributes()) {
-                    for (int i = 0; i < prob.getNumAttributes(); i++) {
-                        weightedInputs += super.getWeightedInput(iID + i, oID, val);
-                    } 
+                    weightedInputs += super.getWeightedInput(iID, hidID, val, "hidden");
                     iID++;
                 }
-                
-                //**********Calculate error and output value**********//
-                output[oID] = calculateActivation(weightedInputs);
-                double error = calculateError(oID, output[oID], target);
+
+                outputHidden[hidID] = calculateActivation(weightedInputs);
             }
-            calculateResults(output, target);
+
+            // For every output node, calculate the sum of the weighted inputs
+            for (int oID = 0; oID < OUT_NODES; oID++) {
+                // Calculate sum of weighted inputs
+                double weightedInputs = 0.0;
+                for (int hidID = 0; hidID < super.getNumHiddenNodes(); hidID++) {
+                    weightedInputs += super.getWeightedInput(hidID, oID, outputHidden[hidID], "output");
+                }
+
+                // Calculate activation and error
+                outputFinal[oID] = calculateActivation(weightedInputs);
+                double error = calculateError(oID, outputFinal[oID], target);
+
+            }
+
+
+            calculateResults(outputFinal, target);
         }
         return this.numCorrect;
     }
