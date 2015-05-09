@@ -9,7 +9,7 @@
 
 import java.util.*;
 
-public class NeuralNetwork extends Perceptron
+public class NeuralNetwork extends Network
 {   
     //Perceptron constants
     private static final double SIGMOID_CONSTANT = 0.0;
@@ -43,9 +43,13 @@ public class NeuralNetwork extends Perceptron
             double[] target = new double[OUT_NODES];
             double[] output = new double[OUT_NODES];
             
+            // Get next wine/attribute list frm problem, set the corresponding quality
+            // index of the target output vector to 1
             Clause temp = lit.next();
             target[temp.getQuality()] = 1;
             
+            // For every output node, calculate the sum of the weighted inputs
+
             for (int oID = 0; oID < OUT_NODES; oID++) {
                 
                 //**********Calculate sum of weighted inputs**********//
@@ -81,6 +85,7 @@ public class NeuralNetwork extends Perceptron
         return target[outID] - outVal;
     }
     
+
     
     //Calculate the results of a given problem clause. Keeps track of total correctly 
     //estimated clauses. 
