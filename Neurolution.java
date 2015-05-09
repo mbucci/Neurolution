@@ -14,12 +14,13 @@ public class Neurolution
 {
 
     private static Problem problem;
-    
     private static File testFile;
+    private static int numAttr;
     
     private static int outputNodes;
     private static int epochs;
     private static double learningRate;
+    private static int numCorrect;
     
     /**
      * Main Function
@@ -43,9 +44,15 @@ public class Neurolution
         
         // NNRunner runner = new NNRunner(outputNodes, epochs, learningRate);
         problem = new Problem(testFile);
-        problem.print();
-        
+        numAttr = problem.getNumAttributes();
+        System.out.println("numattr: " + numAttr);
+        System.out.println("numprob: " + problem.getNumProblems());
+
+        NeuralNetwork nn = new NeuralNetwork(numAttr); 
+        nn.run(problem);
+        nn.printResults(problem);       
         // runner.run(trainProb);
         // runner.run(testProb);
     }
 }
+

@@ -9,7 +9,7 @@
 
 import java.util.*;
 
-public class NeuralNetwork extends Network
+public class NeuralNetworkk extends Network
 {   
     //Perceptron constants
     private static final double SIGMOID_CONSTANT = 0.0;
@@ -21,12 +21,12 @@ public class NeuralNetwork extends Network
     /**
      * Constructor
      */
-    public NeuralNetwork(int numAttr) {
+    public NeuralNetworkk(int numAttr) {
         this(numAttr, null);
     }
     
     //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
-    public NeuralNetwork(int numAttr, double[] initialWeights) {
+    public NeuralNetworkk(int numAttr, double[] initialWeights) {
         super();
         this.inputNodes = numAttr;
         if (initialWeights == null) super.initWeights(this.inputNodes, OUT_NODES);
