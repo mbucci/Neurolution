@@ -1,5 +1,5 @@
 /**
- * Implements a Perceptron Network
+ * Implements a layered Network
  * 
  * Max Bucci, Nikki Morin, Megan Maher
  * Created: 4/13/15
@@ -8,7 +8,6 @@
  */
 
 import java.util.*;
-
 
 public class Network
 {
@@ -22,12 +21,7 @@ public class Network
     // private Map<Integer, List<Edge>> network;    //Perceptron data structure
     private int biasNodeID;                      //ID of the bias node
     private int numHiddenNodes;                  // Number of hidden neurons
-
    
-    /**
-     * Constructor. If newNet is true, weights will be a high for the weigth range, otherwise it will
-     * be specific values for the edge weights. 
-     */ 
     public Network() {
         this.hiddenLayer = new HashMap<Integer, List<Edge>>();
         this.outputLayer = new HashMap<Integer, List<Edge>>();
@@ -40,7 +34,7 @@ public class Network
 
     public void initWeights(int numInput, int numOutput, double[] weights) {
         // Set the number of hidden nodes to be avg of numInput and numOutput
-        numHiddenNodes = numInput + numOutput / 2; 
+        numHiddenNodes = (numInput + numOutput) / 2; 
         // First init weights between input and hidden layers
         // Then init weights between hidden and output layers
 
@@ -98,8 +92,6 @@ public class Network
             }
             this.outputLayer.put(i, edgeList);
         }
-
-        
     }
     
     //Given an input node ID, output node ID and input value, calculates the weighted input for

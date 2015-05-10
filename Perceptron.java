@@ -65,4 +65,27 @@ public class Perceptron
     public double getWeight(int inID, int outID) {
         return this.network.get(inID).get(outID).getWeight();
     }
+
+    public void initWeights(int numInput, int numOutput, double[] weights) {
+        
+        this.biasNodeID = rand.nextInt(numInput);
+        for (int i = 0; i < numInput; i++) {
+            
+            List<Edge> edgeList = new ArrayList<Edge>();
+            for (int j = 0; j < numOutput; j++) {
+                double value;
+                if (weights == null) {
+                    //do weight initiliazation from weight ranges   
+                    value = this.rand.nextDouble() * WEIGHT_HIGH;
+                    value -= WEIGHT_OFF;
+                } else value = weights[numOutput*i + j];
+
+                Edge newEdge = new Edge(i, j, value);
+                edgeList.add(newEdge);
+            }
+            this.network.put(i, edgeList);
+        }
+    }
+
+    
 }

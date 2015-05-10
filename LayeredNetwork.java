@@ -1,5 +1,5 @@
 /**
- * Implements a Perceptron Neural Network
+ * Implements a Single Layer Neural Network
  * 
  * Max Bucci, Nikki Morin, Megan Maher
  * Created: 4/13/15
@@ -65,14 +65,6 @@ public class LayeredNetwork extends Network
                     weightedInputs += super.getWeightedInput(iID, hidID, val, "hidden");
                     iID++;
                 }
-                // for (Double val : temp.getAttributes()) {
-                //     for (int i = 0; i < prob.getNumAttributes(); i++) {
-                //         weightedInputs += super.getWeightedInput(iID + i, hidID, val, "hidden");
-                //     } 
-                //     iID++;
-                // }
-                // System.out.println("WeightedInputs: " + weightedInputs);
-
 
                 outputHidden[hidID] = calculateActivation(weightedInputs);
             }
