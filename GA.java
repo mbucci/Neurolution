@@ -126,14 +126,6 @@ public class GA {
 		}
 	}
 
-	private static void rankGeneration() {
-		// First clear the previous rankings
-		for (int i = 0; i < numIndividuals; i++) {
-			rankings[i] = scores[i];
-		}
-		Arrays.sort(rankings);
-	}
-
 	// Weigh individuals based on rank + choose randomly
 	private static double[] selectionByRanking() {
 		int randomNum;
@@ -220,9 +212,11 @@ public class GA {
 					bestIndividual = individuals[i];
 				}
 				scores[i] = score;
+				rankings[i] = score;
 			}
 
-			rankGeneration();
+			//sorts the ranking array
+			Arrays.sort(rankings);
 
 			// Create the new generation
 			for (int i = 0; i < numIndividuals; i+=2) {
