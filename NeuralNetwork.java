@@ -78,7 +78,7 @@ public class NeuralNetwork extends Perceptron
             calculateResults(output, target);
         }
         // return this.numCorrect;
-        System.out.println(this.numCorrect);
+        // System.out.println(this.numCorrect);
         return totalError;
     }
 
