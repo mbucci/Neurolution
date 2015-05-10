@@ -5,14 +5,16 @@ JC = javac
 	$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-	NeuralNetwork.java\
-	LayeredNetwork.java\
-	Perceptron.java\
-	Network.java\
-	Neurolution.java\
-	Edge.java\
-	Problem.java\
 	Clause.java\
+	Edge.java\
+	GA.java\
+	LayeredNetwork.java\
+	Network.java\
+	NeuralNetwork.java\
+	Neurolution.java\
+	Perceptron.java\
+	Problem.java\
+	
  
 default: classes
 
