@@ -33,6 +33,7 @@ public class GA {
 
 	private static int bestIteration = 0;
 	private static double bestScore = Double.MAX_VALUE;
+	private static int bestNumCorrect = 0;
 	private	static double[] bestIndividual;
 
 	private static int numWeights;
@@ -166,11 +167,12 @@ public class GA {
 	}
 
 	public static void printResults(String fileName, int numProblems) {
-		double percent = bestScore / (double)numProblems;
+		double percent = bestNumCorrect / (double)numProblems;
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
 		System.out.println("--------------------------------------");
-		System.out.format("Clauses satisfied: %d -> %%%.1f\n", (int)bestScore, percent*100);
+		System.out.printf("Error: %.1f\n", bestScore);
+		System.out.printf("Correctly Classified: %d ---> %%%.1f\n", bestNumCorrect, percent);
 		// System.out.println("Assignment of weights: ");
 		// printIndividual(bestIndividual);
 		System.out.println("Found in iteration: " + bestIteration);
@@ -189,6 +191,7 @@ public class GA {
 	public static void runGA(Problem problem) {
 		int generationCount = 1;
 		double score = 0.;
+		int num_correct = 0;
 		double[][] newGeneration = new double[numIndividuals][numWeights];
 		scores = new double[numIndividuals];
 		double randomNum;
@@ -200,15 +203,20 @@ public class GA {
 				if (networkType == LAYERED) {
 					layeredNet.changeWeights(numInputs, individuals[i]);
 					score = layeredNet.run(problem);
+					num_correct = layeredNet.getNumCorrect();
+					// System.out.println(num_correct);
 				} else {
 					perceptron.changeWeights(numInputs, individuals[i]);
 					score = perceptron.run(problem);
+					num_correct = perceptron.getNumCorrect();
+					// System.out.println(num_correct);
 				}
 
 				if (score <= bestScore) {
 					bestIteration = generationCount;
 					bestScore = score;
 					bestIndividual = individuals[i];
+					bestNumCorrect = num_correct;
 				}
 				scores[i] = score;
 				rankings[i] = score;
@@ -216,7 +224,7 @@ public class GA {
 
 			//sorts the ranking array
 			Arrays.sort(rankings);
-			printranks();
+			// printranks();
 
 			// Create the new generation
 			for (int i = 0; i < numIndividuals; i+=2) {

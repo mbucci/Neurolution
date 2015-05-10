@@ -70,6 +70,7 @@ public class NeuralNetwork extends Perceptron
             calculateResults(output, target);
         }
         // return this.numCorrect;
+        System.out.println(this.numCorrect);
         return totalError;
     }
     
@@ -100,6 +101,10 @@ public class NeuralNetwork extends Perceptron
             }
         }
         if (target[highIndex] == 1.0) this.numCorrect++;
+    }
+
+    public int getNumCorrect() {
+        return this.numCorrect;
     }
 
     public int getNumWeights() {

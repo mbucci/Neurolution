@@ -38,8 +38,8 @@ public class LayeredNetwork extends Network
     
     
     //Main function for NN. Runs perceptron NN on a given problem
-    public int run(Problem prob) {
-
+    public double run(Problem prob) {
+        double totalError = 0.;
         this.numCorrect = 0;
         ListIterator<Clause> lit = prob.getIterator();
         while (lit.hasNext()) {
@@ -91,6 +91,7 @@ public class LayeredNetwork extends Network
                 // Calculate activation and error
                 outputFinal[oID] = calculateActivation(weightedInputs);
                 double error = calculateError(oID, outputFinal[oID], target);
+                totalError+=error;
                 // System.out.println("Error: " + error);
 
             }
@@ -103,7 +104,7 @@ public class LayeredNetwork extends Network
 
             calculateResults(outputFinal, target);
         }
-        return this.numCorrect;
+        return totalError;
     }
     
     
@@ -116,7 +117,7 @@ public class LayeredNetwork extends Network
     
     //Calculate error for a given output node, output value and target value.
     private double calculateError(int outID, double outVal, double[] target) {
-        return target[outID] - outVal;
+        return (target[outID] - outVal)*(target[outID] - outVal);
     }
     
     //Calculate the results of a given problem clause. Keeps track of total correctly 
@@ -142,6 +143,10 @@ public class LayeredNetwork extends Network
 
     public int getNumWeights() {
         return this.numWeights;
+    }
+
+    public int getNumCorrect() {
+        return this.numCorrect;
     }
 
 }
