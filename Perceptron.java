@@ -12,8 +12,8 @@ import java.util.*;
 
 public class Perceptron
 {
-    private static final double WEIGHT_HIGH = 0.3;
-    private static final double WEIGHT_OFF = 0.15;
+    private static final double WEIGHT_HIGH = 0.5;
+    private static final double WEIGHT_OFF = 0.5;
 
     private Random rand;
     private Map<Integer, List<Edge>> network;    //Perceptron data structure

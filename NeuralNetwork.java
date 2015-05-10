@@ -16,7 +16,8 @@ public class NeuralNetwork extends Perceptron
     private static final int OUT_NODES = 10;
 
     private int inputNodes;       //Algorithm specific variables
-    private int numCorrect;       //Keeps track of performance
+    public int numCorrect;       //Keeps track of performance
+    private double totalError;
     
     /**
      * Constructor
@@ -35,7 +36,7 @@ public class NeuralNetwork extends Perceptron
     
     
     //Main function for NN. Runs perceptron NN on a given problem
-    public int run(Problem prob) {
+    public double run(Problem prob) {
         
         this.numCorrect = 0;
         ListIterator<Clause> lit = prob.getIterator();
@@ -62,10 +63,18 @@ public class NeuralNetwork extends Perceptron
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);
                 double error = calculateError(oID, output[oID], target);
+                totalError += error;
             }
             calculateResults(output, target);
         }
-        return this.numCorrect;
+        double result = calculateMeanError();
+        return result;
+    }
+
+    private double calculateMeanError() {
+        double result = Math.pow(totalError, 2);
+        result = 1 / result;
+        return result;
     }
     
     

@@ -30,6 +30,7 @@ public class GA {
 	private static int bestIteration = 0;
 	private static double bestScore = 0.;
 	private	static double[] bestIndividual;
+	private static int numSat = 0;
 
 	private static double totalScore; //total current score, used to calc percentages
 
@@ -47,7 +48,7 @@ public class GA {
 
 		totalScore = 0;
 		rankings = new double[numIndividuals];
-		network = new NeuralNetwork(numIn, scores);
+		network = new NeuralNetwork(numIn);
 	}
 
 	// Performs crossover between two parents, and returns two children
@@ -159,6 +160,9 @@ public class GA {
 		System.out.println("Number of Output nodes: " + numOutputs);
 		System.out.println("--------------------------------------");
 		System.out.format("Clauses satisfied: %d -> %%%.1f\n", (int)bestScore, percent*100);
+		System.out.println("BESTSCORE: " + bestScore);
+		System.out.println("Num correct " + numSat);
+		// System.out.println("Total: " + )
 		System.out.println("Assignment of weights: ");
 		printIndividual(bestIndividual, numWeights);
 		System.out.println("Found in iteration: " + bestIteration);
@@ -191,6 +195,7 @@ public class GA {
 				if (score >= bestScore) {
 					bestIteration = generationCount;
 					bestScore = score;
+					numSat = network.numCorrect;
 					bestIndividual = individuals[i];
 				}
 				scores[i] = score;
