@@ -172,7 +172,7 @@ public class GA {
 		System.out.println("Number of Problems: " + numProblems);
 		System.out.println("--------------------------------------");
 		System.out.printf("Error: %.1f\n", bestScore);
-		System.out.printf("Correctly Classified: %d ---> %%%.1f\n", bestNumCorrect, percent);
+		System.out.printf("Correctly Classified: %d ---> %%%.1f\n", bestNumCorrect, percent*100.);
 		// System.out.println("Assignment of weights: ");
 		// printIndividual(bestIndividual);
 		System.out.println("Found in iteration: " + bestIteration);
