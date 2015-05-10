@@ -152,12 +152,13 @@ public class GA {
 		}
 	}
 
-	public static void printResults(String fileName, int numWeights) {
+	public static void printResults(String fileName, int numWeights, int numProblems) {
+		double percent = bestScore / (double)numProblems;
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
 		System.out.println("Number of Output nodes: " + numOutputs);
 		System.out.println("--------------------------------------");
-		System.out.println("Best score -> " + bestScore);
+		System.out.format("Clauses satisfied: %d -> %%%.1f\n", (int)bestScore, percent*100);
 		System.out.println("Assignment of weights: ");
 		printIndividual(bestIndividual, numWeights);
 		System.out.println("Found in iteration: " + bestIteration);

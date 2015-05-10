@@ -41,12 +41,12 @@ public class Neurolution
         problem = new Problem(testFile);
         problem.splitIntoTrainAndTest();
         numAttr = problem.getNumAttributes();
-        System.out.println("Num Attributes: " + numAttr);
-        System.out.println("Num Problems: " + problem.getNumProblems());
+        // System.out.println("Num Attributes: " + numAttr);
+        // System.out.println("Num Problems: " + problem.getNumProblems());
 
         ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, NUM_OUTPUT);
         ga.runGA(problem, NUM_WEIGHTS);
-        ga.printResults(args[0], NUM_WEIGHTS);
+        ga.printResults(args[0], NUM_WEIGHTS, problem.getNumProblems());
 
         LayeredNetwork ln = new LayeredNetwork(numAttr); 
         ln.run(problem);
