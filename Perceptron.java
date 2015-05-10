@@ -34,7 +34,6 @@ public class Perceptron
     }
 
     public void initWeights(int numInput, int numOutput, double[] weights) {
-        
         this.biasNodeID = rand.nextInt(numInput);
         for (int i = 0; i < numInput; i++) {
             
@@ -42,7 +41,7 @@ public class Perceptron
             for (int j = 0; j < numOutput; j++) {
                 double value;
                 if (weights == null) {
-                    //do weight initiliazation from weight ranges   
+                    //do weight initiliazation from weight ranges
                     value = getRandomWeight();
                 } else value = weights[numOutput*i + j];
 
