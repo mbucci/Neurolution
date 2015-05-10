@@ -1,9 +1,9 @@
-/**
+/*
  * Implements a Perceptron Neural Network
  * 
  * Max Bucci, Nikki Morin, Megan Maher
  * Created: 4/13/15
- * Last Modified: 4/13/15
+ * Last Modified: 5/10/15
  * 
  */
 
@@ -11,13 +11,11 @@ import java.util.*;
 
 public class NeuralNetwork extends Perceptron
 {   
-    //Perceptron constants
-    private static final double SIGMOID_CONSTANT = 0.0;
-    private static final int OUT_NODES = 10;
 
     private int inputNodes;       //Algorithm specific variables
     private int numCorrect;       //Keeps track of performance
-    
+    private int numWeights;
+
     /**
      * Constructor
      */
@@ -25,14 +23,17 @@ public class NeuralNetwork extends Perceptron
         this(numAttr, null);
     }
     
+
     //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
     public NeuralNetwork(int numAttr, double[] initialWeights) {
         super();
         this.inputNodes = (int) Math.pow(numAttr, 2);
-        if (initialWeights == null) super.initWeights(this.inputNodes, OUT_NODES);
-        else super.initWeights(this.inputNodes, OUT_NODES, initialWeights);
+        if (initialWeights == null) super.initWeights(this.inputNodes);
+        else super.initWeights(this.inputNodes, initialWeights);
+
+        this.numWeights = this.inputNodes * OUT_NODES;
     }
-    
+
     
     //Main function for NN. Runs perceptron NN on a given problem
     public int run(Problem prob) {
@@ -97,9 +98,7 @@ public class NeuralNetwork extends Perceptron
         if (target[highIndex] == 1.0) this.numCorrect++;
     }
 
-    public void printResults(Problem prob) {
-        System.out.println("\n*_*_*_*_* PERCEPTRON RESULTS *_*_*_*_*");
-         double percentCorrect = 100 * (double)this.numCorrect / (double)prob.getNumProblems();
-         System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
-     }
+    public int getNumWeights() {
+        return this.numWeights;
+    }
 }
