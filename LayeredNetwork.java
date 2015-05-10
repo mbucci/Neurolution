@@ -1,9 +1,9 @@
-/**
+/*
  * Implements a Single Layer Neural Network
  * 
- * Max Bucci, Nikki Morin, Megan Maher
+ * Nikki Morin, Max Bucci, Megan Maher
  * Created: 4/13/15
- * Last Modified: 4/13/15
+ * Last Modified: 5/10/15
  * 
  */
 
@@ -12,11 +12,11 @@ import java.util.*;
 public class LayeredNetwork extends Network
 {   
     //Perceptron constants
-    private static final double SIGMOID_CONSTANT = 0.0;
-    private static final int OUT_NODES = 10;
+
 
     private int inputNodes;       //Algorithm specific variables
     private int numCorrect;       //Keeps track of performance
+    private int numWeights;
     
     /**
      * Constructor
@@ -30,8 +30,10 @@ public class LayeredNetwork extends Network
         super();
         this.inputNodes = numAttr;
         // this.inputNodes = (int) Math.pow(numAttr, 2);
-        if (initialWeights == null) super.initWeights(this.inputNodes, OUT_NODES);
-        else super.initWeights(this.inputNodes, OUT_NODES, initialWeights, true);
+        if (initialWeights == null) super.initWeights(this.inputNodes);
+        else super.initWeights(this.inputNodes, initialWeights, true);
+
+        this.numWeights = (this.inputNodes + OUT_NODES) * super.getNumHiddenNodes();
     }
     
     
@@ -139,6 +141,8 @@ public class LayeredNetwork extends Network
          System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
     }
 
-
+    public int getNumWeights() {
+        return this.numWeights;
+    }
 
 }

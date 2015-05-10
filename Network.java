@@ -1,9 +1,9 @@
-/**
+/*
  * Implements a layered Network
  * 
- * Max Bucci, Nikki Morin, Megan Maher
+ * Nikki Morin, Max Bucci, Megan Maher
  * Created: 4/13/15
- * Last Modified: 4/13/15
+ * Last Modified: 5/10/15
  * 
  */
 
@@ -13,6 +13,9 @@ public class Network
 {
     private static final double WEIGHT_HIGH = 0.3;
     private static final double WEIGHT_OFF = 0.15;
+
+    protected static final double SIGMOID_CONSTANT = 0.0;
+    protected static final int OUT_NODES = 10;
 
     private Map<Integer, List<Edge>> hiddenLayer;   // Hidden nodes and their input edges
     private Map<Integer, List<Edge>> outputLayer;   // Output nodes and their input edges
@@ -28,17 +31,17 @@ public class Network
         this.rand = new Random();
     }
 
-    public void initWeights(int numInput, int numOutput) {
-        this.initWeights(numInput, numOutput, null, true);
+    public void initWeights(int numInput) {
+        this.initWeights(numInput, null, true);
     }
 
-    public void changeWeights(int numInput, int numOutput, double[] weights) {
-        initWeights(numInput, numOutput, weights, false);
+    public void changeWeights(int numInput, double[] weights) {
+        initWeights(numInput, weights, false);
     }
 
-    public void initWeights(int numInput, int numOutput, double[] weights, boolean newNet) {
-        // Set the number of hidden nodes to be avg of numInput and numOutput
-        numHiddenNodes = (numInput + numOutput) / 2; 
+    public void initWeights(int numInput, double[] weights, boolean newNet) {
+        // Set the number of hidden nodes to be avg of numInput and OUT_NODES
+        numHiddenNodes = (numInput + OUT_NODES) / 2; 
         // First init weights between input and hidden layers
         // Then init weights between hidden and output layers
 
@@ -82,7 +85,7 @@ public class Network
         // Then initialize weights between hidden and output layers
         for (int i = 0; i < numHiddenNodes; i++) {
             List<Edge> edgeList = new ArrayList<Edge>();
-            for (int j = 0; j < numOutput; j++) {
+            for (int j = 0; j < OUT_NODES; j++) {
                 double value;
                 if (weights == null) {
                     //do weight initiliazation from weight ranges   
@@ -90,10 +93,10 @@ public class Network
                 } else {
                     // Get the correct index frm the list of weights
                     // by calculating the offset; for every input node,
-                    // there will be numOutput edges; effectively
+                    // there will be OUT_NODES edges; effectively
                     // divides double[] weights into small subarrays/chunks
                     // Count is the offset @TODO doublecheck count value!
-                    int index = numOutput*i + j;
+                    int index = OUT_NODES*i + j;
                     value = weights[count + index];
                 }
                 if (newNet) {

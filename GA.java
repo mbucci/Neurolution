@@ -26,7 +26,6 @@ public class GA {
 	private static double mutationProb;
 	private static double crossoverProb;
 	private static int numInputs;
-	private static int numOutputs;
 
 	private static double[] scores;
 	private static double[] rankings;
@@ -43,23 +42,23 @@ public class GA {
 
 	}
 
-	public GA(int numIndv, double mutProb, int iters, double crossProb, int numIn, int numOut, String type) {
+	public GA(int numIndv, double mutProb, int iters, double crossProb, int numIn, String type) {
 		numIndividuals = numIndv;
 		mutationProb = mutProb;
 		iterations = iters;
 		crossoverProb = crossProb;
 		numInputs = numIn;
-		numOutputs = numOut;
 
 		rankings = new double[numIndividuals];
 		if (type.equals("l")) {
 			networkType = LAYERED;
 			layeredNet = new LayeredNetwork(numIn);
-			numWeights = (numIn + numOut) * layeredNet.getNumHiddenNodes();
+			numWeights = layeredNet.getNumWeights();
+			// numWeights = (numIn + 10) * layeredNet.getNumHiddenNodes();
 		} else {
 			networkType = PERCEPTRON;
 			perceptron = new NeuralNetwork(numIn);
-			numWeights = numIn * numOut;
+			numWeights = perceptron.getNumWeights();
 		}
 	}
 
@@ -169,7 +168,6 @@ public class GA {
 		double percent = bestScore / (double)numProblems;
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
-		System.out.println("Number of Output nodes: " + numOutputs);
 		System.out.println("--------------------------------------");
 		System.out.format("Clauses satisfied: %d -> %%%.1f\n", (int)bestScore, percent*100);
 		System.out.println("BESTSCORE: " + bestScore);
@@ -202,10 +200,10 @@ public class GA {
 			// Evaluate each individual according to the fitness funciton
 			for (int i = 0; i < numIndividuals; i++) {
 				if (networkType == LAYERED) {
-					layeredNet.changeWeights(numInputs, numOutputs, individuals[i]);
+					layeredNet.changeWeights(numInputs, individuals[i]);
 					score = layeredNet.run(problem);
 				} else {
-					perceptron.changeWeights(numInputs, numOutputs, individuals[i]);
+					perceptron.changeWeights(numInputs, individuals[i]);
 					score = perceptron.run(problem);
 					numSat = perceptron.numCorrect;
 				}

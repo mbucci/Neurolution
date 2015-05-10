@@ -1,9 +1,8 @@
-/**
+/*
  * 
- * 
- * Max Bucci, Nikki Morin, Megan Maher
+ * Megan Maher, Nikki Morin, Max Bucci
  * Created: 5/7/15
- * Last Modified: 5/7/15
+ * Last Modified: 5/10/15
  * 
  */
 
@@ -17,9 +16,7 @@ public class Neurolution
 	private static final double MUTATION_PROB = .1;
 	private static final double CROSSOVER_PROB = .7;
 	private static final int NUM_INPUT = 11;
-	private static final int NUM_OUTPUT = 10;
 	private static final int NUM_IND = 100;
-	private static final int NUM_WEIGHTS = 120;
 
     private static Problem problem;
     private static File testFile;
@@ -50,7 +47,7 @@ public class Neurolution
         // System.out.println("Num Attributes: " + numAttr);
         // System.out.println("Num Problems: " + problem.getNumProblems());
 
-        ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, NUM_OUTPUT, networkType);
+        ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, networkType);
         ga.runGA(problem);
         ga.printResults(args[0], problem.getNumProblems());
 
