@@ -39,7 +39,8 @@ public class NeuralNetwork extends Perceptron
     public double run(Problem prob) {
         
         this.numCorrect = 0;
-        this.totalError = 0;
+        this.totalError = 0.0;
+        
         ListIterator<Clause> lit = prob.getIterator();
         while (lit.hasNext()) {
             double[] target = new double[OUT_NODES];
@@ -70,13 +71,14 @@ public class NeuralNetwork extends Perceptron
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);
                 double error = calculateError(oID, output[oID], target);
-                totalError += error;
+
+                // System.out.println(error);
+                totalError+=error;
             }
             calculateResults(output, target);
         }
-        double result = totalError;
-        // System.out.println("Total error: " + totalError);
-        return result;
+        // return this.numCorrect;
+        return totalError;
     }
 
     // Calculates activation function for inputs. Derivative is g(in) * (1 - g(in))
@@ -88,9 +90,7 @@ public class NeuralNetwork extends Perceptron
     
     //Calculate error for a given output node, output value and target value.
     private double calculateError(int outID, double outVal, double[] target) {
-        double result = target[outID] - outVal;
-        result = 1 / Math.pow(result, 2);
-        return result;
+        return ((target[outID] - outVal)*(target[outID] - outVal));
     }
     
     
