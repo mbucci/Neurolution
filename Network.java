@@ -78,8 +78,8 @@ public class Network
                     hiddenLayer.get(i).get(j).setWeight(value);
                 }
                 
-            }
-            this.hiddenLayer.put(i, edgeList);
+            } 
+            if (newNet) { this.hiddenLayer.put(i, edgeList); }
         }
 
         // Then initialize weights between hidden and output layers
@@ -108,7 +108,7 @@ public class Network
                     outputLayer.get(i).get(j).setWeight(value);
                 }
             }
-            this.outputLayer.put(i, edgeList);
+            if (newNet) { this.outputLayer.put(i, edgeList); }
         }
     }
     

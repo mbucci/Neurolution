@@ -13,7 +13,8 @@ public class NeuralNetwork extends Perceptron
 {   
 
     private int inputNodes;       //Algorithm specific variables
-    private int numCorrect;       //Keeps track of performance
+    public int numCorrect;       //Keeps track of performance
+    private double totalError;
     private int numWeights;
 
     /**
@@ -34,11 +35,11 @@ public class NeuralNetwork extends Perceptron
         this.numWeights = this.inputNodes * OUT_NODES;
     }
 
-    
     //Main function for NN. Runs perceptron NN on a given problem
     public double run(Problem prob) {
+        
         this.numCorrect = 0;
-        double totalError = 0.;
+        this.totalError = 0.0;
         
         ListIterator<Clause> lit = prob.getIterator();
         while (lit.hasNext()) {
@@ -54,16 +55,23 @@ public class NeuralNetwork extends Perceptron
                 //Use a given attribute N (number of attribute) times
                 double weightedInputs = 0.0;
                 int iID = 0;
+
                 for (Double val : temp.getAttributes()) {
-                    for (int i = 0; i < prob.getNumAttributes(); i++) {
-                        weightedInputs += super.getWeightedInput(iID + i, oID, val);
-                    } 
+                    weightedInputs += super.getWeightedInput(iID, oID, val);
                     iID++;
                 }
+
+                // for (Double val : temp.getAttributes()) {
+                //     for (int i = 0; i < prob.getNumAttributes(); i++) {
+                //         weightedInputs += super.getWeightedInput(iID + i, oID, val);
+                //     } 
+                //     iID++;
+                // }
                 
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);
                 double error = calculateError(oID, output[oID], target);
+
                 // System.out.println(error);
                 totalError+=error;
             }
@@ -73,8 +81,7 @@ public class NeuralNetwork extends Perceptron
         System.out.println(this.numCorrect);
         return totalError;
     }
-    
-    
+
     // Calculates activation function for inputs. Derivative is g(in) * (1 - g(in))
     private double calculateActivation(double input) {
         double denominator = 1 + Math.exp(SIGMOID_CONSTANT - input);
@@ -100,7 +107,10 @@ public class NeuralNetwork extends Perceptron
                 highIndex = i;
             }
         }
-        if (target[highIndex] == 1.0) this.numCorrect++;
+        if (target[highIndex] == 1.0) { 
+            this.numCorrect++;
+            System.out.println("FOUND ONE");
+        }
     }
 
     public int getNumCorrect() {
@@ -109,5 +119,11 @@ public class NeuralNetwork extends Perceptron
 
     public int getNumWeights() {
         return this.numWeights;
+    }
+
+    public void printResults(Problem prob) {
+        System.out.println("*_*_*_*_* NEURAL NETWORK RESULTS *_*_*_*_*");
+         double percentCorrect = 100 * (double)this.numCorrect / (double)prob.getNumProblems();
+         System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
     }
 }

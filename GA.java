@@ -35,6 +35,7 @@ public class GA {
 	private static double bestScore = Double.MAX_VALUE;
 	private static int bestNumCorrect = 0;
 	private	static double[] bestIndividual;
+	private static int numSat = 0;
 
 	private static int numWeights;
 
@@ -50,7 +51,6 @@ public class GA {
 		numInputs = numIn;
 
 		rankings = new double[numIndividuals];
-
 		if (type.equals("l")) {
 			networkType = LAYERED;
 			layeredNet = new LayeredNetwork(numIn);
@@ -60,7 +60,6 @@ public class GA {
 			networkType = PERCEPTRON;
 			perceptron = new NeuralNetwork(numIn);
 			numWeights = perceptron.getNumWeights();
-			// numWeights = numIn * numIn * 10;
 		}
 	}
 
@@ -171,8 +170,15 @@ public class GA {
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
 		System.out.println("--------------------------------------");
+<<<<<<< HEAD
 		System.out.printf("Error: %.1f\n", bestScore);
 		System.out.printf("Correctly Classified: %d ---> %%%.1f\n", bestNumCorrect, percent);
+=======
+		System.out.format("Clauses satisfied: %d -> %%%.1f\n", (int)bestScore, percent*100);
+		System.out.println("BESTSCORE: " + bestScore);
+		System.out.println("Num correct " + numSat);
+		// System.out.println("Total: " + )
+>>>>>>> origin
 		// System.out.println("Assignment of weights: ");
 		// printIndividual(bestIndividual);
 		System.out.println("Found in iteration: " + bestIteration);
@@ -208,13 +214,18 @@ public class GA {
 				} else {
 					perceptron.changeWeights(numInputs, individuals[i]);
 					score = perceptron.run(problem);
+<<<<<<< HEAD
 					num_correct = perceptron.getNumCorrect();
 					// System.out.println(num_correct);
+=======
+					numSat = perceptron.numCorrect;
+>>>>>>> origin
 				}
 
 				if (score <= bestScore) {
 					bestIteration = generationCount;
 					bestScore = score;
+					
 					bestIndividual = individuals[i];
 					bestNumCorrect = num_correct;
 				}

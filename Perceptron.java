@@ -11,8 +11,8 @@ import java.util.*;
 
 public class Perceptron
 {
-    private static final double WEIGHT_HIGH = 0.3;
-    private static final double WEIGHT_OFF = 0.15;
+    private static final double WEIGHT_HIGH = 0.5;
+    private static final double WEIGHT_OFF = 0.5;
 
     protected static final double SIGMOID_CONSTANT = 0.0;
     protected static final int OUT_NODES = 10;
