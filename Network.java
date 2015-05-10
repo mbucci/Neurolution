@@ -40,7 +40,7 @@ public class Network
 
     public void initWeights(int numInput, int numOutput, double[] weights) {
         // Set the number of hidden nodes to be avg of numInput and numOutput
-        numHiddenNodes = numInput + numOutput / 2; 
+        numHiddenNodes = (numInput + numOutput) / 2; 
         // First init weights between input and hidden layers
         // Then init weights between hidden and output layers
 
