@@ -106,10 +106,19 @@ public class NeuralNetwork extends Perceptron
                 highIndex = i;
             }
         }
-        if (target[highIndex] == 1.0) this.numCorrect++;
+        if (target[highIndex] == 1.0) { 
+            this.numCorrect++;
+            System.out.println("FOUND ONE");
+        }
     }
 
     public int getNumWeights() {
         return this.numWeights;
+    }
+
+    public void printResults(Problem prob) {
+        System.out.println("*_*_*_*_* NEURAL NETWORK RESULTS *_*_*_*_*");
+         double percentCorrect = 100 * (double)this.numCorrect / (double)prob.getNumProblems();
+         System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
     }
 }
