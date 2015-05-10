@@ -29,10 +29,14 @@ public class Network
     }
 
     public void initWeights(int numInput, int numOutput) {
-        this.initWeights(numInput, numOutput, null);
+        this.initWeights(numInput, numOutput, null, true);
     }
 
-    public void initWeights(int numInput, int numOutput, double[] weights) {
+    public void changeWeights(int numInput, int numOutput, double[] weights) {
+        initWeights(numInput, numOutput, weights, false);
+    }
+
+    public void initWeights(int numInput, int numOutput, double[] weights, boolean newNet) {
         // Set the number of hidden nodes to be avg of numInput and numOutput
         numHiddenNodes = (numInput + numOutput) / 2; 
         // First init weights between input and hidden layers
@@ -63,8 +67,15 @@ public class Network
                     value = weights[index];
                     count++;
                 }
-                Edge newEdge = new Edge(i, j, value);
-                edgeList.add(newEdge);
+                if (newNet) {
+                    // Make new edge
+                    Edge newEdge = new Edge(i, j, value);
+                    edgeList.add(newEdge);
+                } else {
+                    // Get the corresponding edgelist and edge
+                    hiddenLayer.get(i).get(j).setWeight(value);
+                }
+                
             }
             this.hiddenLayer.put(i, edgeList);
         }
@@ -87,8 +98,14 @@ public class Network
                     int index = numOutput*i + j;
                     value = weights[count + index];
                 }
-                Edge newEdge = new Edge(i, j, value);
-                edgeList.add(newEdge);
+                if (newNet) {
+                    // Make new edge
+                    Edge newEdge = new Edge(i, j, value);
+                    edgeList.add(newEdge);
+                } else {
+                    // Get the corresponding edgelist and edge
+                    outputLayer.get(i).get(j).setWeight(value);
+                }
             }
             this.outputLayer.put(i, edgeList);
         }

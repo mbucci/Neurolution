@@ -35,9 +35,9 @@ public class Perceptron
     }
 
     //Use this to initialize with a set of weights
-    public void initWeights(int numInput, int numOutput, double[] weights) {
-        this.initWeights(numInput, numOutput, weights, true);
-    }
+    // public void initWeights(int numInput, int numOutput, double[] weights) {
+    //     this.initWeights(numInput, numOutput, weights, true);
+    // }
 
     //Use this to change the weights of an existing network
     public void changeWeights(int numInput, int numOutput, double[] weights) {
