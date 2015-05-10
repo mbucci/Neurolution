@@ -1,11 +1,10 @@
 /*
  * GA algorithm
- * Solves and inputted CNF using GA
  *
  * NIC - Professor Majercik
- * Nikki Morin, Megan Maher, Kuangji Chen
- * Created: 2/12/15
- * Last Modified: 2/20/15
+ * Megan Maher, Nikki Morin, Max Bucci
+ * Created: 5/01/15
+ * Last Modified: 5/10/15
  *
  */
 
@@ -25,12 +24,12 @@ public class GA {
 	private static int numOutputs;
 
 	private static double[] scores;
-	private static int[] rankings;
+	private static double[] rankings;
 	private static Random rand = new Random();
 
 	private static int bestIteration = 0;
-	private static int bestScore = 0;
-	private	static int[] bestIndividual;
+	private static double bestScore = 0.;
+	private	static double[] bestIndividual;
 
 	private static double totalScore; //total current score, used to calc percentages
 
@@ -47,8 +46,8 @@ public class GA {
 		numOutputs = numOut;
 
 		totalScore = 0;
-		rankings = new int[numIndividuals];
-		network = new NeuralNetwork(problem, null);
+		rankings = new double[numIndividuals];
+		network = new NeuralNetwork(numIn, scores);
 	}
 
 	// Performs crossover between two parents, and returns two children
@@ -78,7 +77,7 @@ public class GA {
 		for (int i = 0; i < numWeights; i++) {
 			randomNum = rand.nextDouble();
 			if (randomNum <= mutationProb) {
-				indiv[i] = nework.getRandomWeight();
+				indiv[i] = network.getRandomWeight();
 			}
 		}
 		return indiv;
@@ -96,7 +95,7 @@ public class GA {
 		return 0;
 	}
 
-	private static int getRanking(int score) {
+	private static int getRanking(double score) {
 		int i = 0;
 		while (rankings[i] != score) {
 			i++;
@@ -153,14 +152,13 @@ public class GA {
 		}
 	}
 
-	public static void printResults(String fileName, int numC, int numWeights) {
-		double percent = (double)bestScore / (double)numC;
+	public static void printResults(String fileName, int numWeights) {
 		System.out.println("Results found for file: " + fileName);
-		System.out.println("Number of Clauses: " + numC);
-		System.out.println("Number of Variables: " + numWeights);
+		System.out.println("Number of Input nodes: " + numInputs);
+		System.out.println("Number of Output nodes: " + numOutputs);
 		System.out.println("--------------------------------------");
-		System.out.format("Clauses satisfied: %d -> %%%.1f\n", bestScore, percent*100);
-		System.out.print("Assignment: ");
+		System.out.println("Best score -> " + bestScore);
+		System.out.println("Assignment of weights: ");
 		printIndividual(bestIndividual, numWeights);
 		System.out.println("Found in iteration: " + bestIteration);
 		System.out.println("I gave iterations of: " + iterations);
@@ -169,7 +167,7 @@ public class GA {
 	// Replaces old generation with new generation
 	private static void replaceGeneration(double[][] newGeneration, int numWeights) {
 		for (int i = 0; i < numIndividuals; i++) {
-			for (int j = 1; j <= numWeights; j++) {
+			for (int j = 0; j < numWeights; j++) {
 				individuals[i][j] = newGeneration[i][j];
 			}
 		}
@@ -198,7 +196,7 @@ public class GA {
 				totalScore += score;
 			}
 
-			rankGeneration(cnf, numC);
+			rankGeneration();
 
 			// Create the new generation
 			for (int i = 0; i < numIndividuals; i+=2) {
@@ -208,7 +206,7 @@ public class GA {
 				// preform crossover
 				randomNum = rand.nextDouble();
 				if (randomNum <= crossoverProb) {
-					int[][] children = crossover(parent1, parent2, numWeights);
+					double[][] children = crossover(parent1, parent2, numWeights);
 					newGeneration[i] = children[0];
 					newGeneration[i+1] = children[1];
 				} else {
@@ -230,92 +228,3 @@ public class GA {
 
 	}
 }
-
-
-
-
-
-
-
-	// // Choose random pool + choose best from pool
-	// private static int[] tournamentRanking(List<CNF> cnf, int numC, int numWeights) {
-	// 	int poolSize = (int)((double)numIndividuals * TOURN_SIZE);
-	// 	if (poolSize < 1) poolSize = 1;
-	// 	int[] chosen = new int[poolSize];
-	// 	int[][] pool = new int[poolSize][numWeights+1];
-	// 	int randomNum;
-
-	// 	int counter = 0;
-	// 	while (counter < poolSize) {
-	// 		randomNum = rand.nextInt(numIndividuals);
-	// 		if (!Arrays.asList(chosen).contains(randomNum)) {
-	// 			chosen[counter] = randomNum;
-	// 			pool[counter] = individuals[counter];
-	// 			counter++;
-	// 		}
-	// 	}
-
-	// 	int[] currBestIndiv = pool[0];
-	// 	int currBestScore = scores[0];
-	// 	int tempScore;
-	// 	for (int i = 1; i < poolSize; i++) {
-	// 		if (scores[i] > currBestScore) {
-	// 			currBestScore = scores[i];
-	// 			currBestIndiv = pool[i];
-	// 		}
-	// 	}
-	// 	return currBestIndiv;
-	// }
-
-	// // Weigh individuals according to fitness
-	// private static int[] boltzmannSelection(List<CNF> cnf, int numC, int numWeights) {
-	// 	double randomNum;
-	// 	double[] sums = new double[numIndividuals];
-	// 	double currSum = 0.;
-	// 	double min_value = Math.pow(eValue, ((double)scores[0]/totalScore));
-	// 	double max_value = min_value;
-
-	// 	for (int i = 1; i < numIndividuals; i++) {
-	// 		currSum += Math.pow(eValue, ((double)scores[i]/totalScore));
-	// 		sums[i] = currSum;
-	// 		if (currSum < min_value) {
-	// 			min_value = currSum;
-	// 		}
-	// 		if (currSum > max_value) {
-	// 			max_value = currSum;
-	// 		}
-	// 	}
-
-	// 	randomNum = (rand.nextDouble() * (max_value - min_value)) + min_value;
-	// 	int chosenOne = chooseSpecifiedB(randomNum, sums);
-	// 	return individuals[chosenOne];
-	// }
-
-	// // Calls appropriate selection method
-	// private static int[] selectParent(int numWeights) {
-	// 	int[] parent = new int[numWeights+1];
-	// 	switch(selectionMethodInt) {
-	// 		case RANK: parent = selectionByRanking(cnf, numC, numWeights); break;
-	// 		case TOURNAMENT: parent = tournamentRanking(cnf, numC, numWeights); break;
-	// 		case BOLTZMANN: parent = boltzmannSelection(cnf, numC, numWeights); break;
-	// 	}
-	// 	return parent;
-	// }
-
-
-		// else {
-		// 	// Randomly decide crossover point
-		// 	randomNum = rand.nextInt(numWeights+1) + 1;
-		// 	for (int i = 1; i <= numWeights; i++) {
-		// 		if (i<randomNum){
-		// 			children[0][i] = parent1[i];
-		// 			children[1][i] = parent2[i];
-		// 		}
-		// 		else {
-		// 			children[0][i] = parent2[i];
-		// 			children[1][i] = parent1[i];
-		// 		}
-		// 	}
-		// }
-
-		// 
