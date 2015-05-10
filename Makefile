@@ -12,7 +12,8 @@ CLASSES = \
 	Neurolution.java\
 	Edge.java\
 	Problem.java\
-	Clause.java
+	Clause.java\
+	GA.java
  
 default: classes
 
