@@ -25,9 +25,14 @@ public class Neurolution
     private static File testFile;
     private static int numAttr;
     private static int generations;
+    private static String networkType;
+
+    private static double numWeights;
+
     /**
      * Main Function
      */
+
     public static void main (String[] args) {
         
         // if (args.length != 4) {
@@ -37,6 +42,7 @@ public class Neurolution
         
         testFile = new File(args[0]);
         generations = Integer.parseInt(args[1]);
+        networkType = args[2];
         
         problem = new Problem(testFile);
         problem.splitIntoTrainAndTest();
@@ -44,9 +50,9 @@ public class Neurolution
         // System.out.println("Num Attributes: " + numAttr);
         // System.out.println("Num Problems: " + problem.getNumProblems());
 
-        ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, NUM_OUTPUT);
-        ga.runGA(problem, NUM_WEIGHTS);
-        ga.printResults(args[0], NUM_WEIGHTS, problem.getNumProblems());
+        ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, NUM_OUTPUT, networkType);
+        ga.runGA(problem);
+        ga.printResults(args[0], problem.getNumProblems());
 
         // LayeredNetwork ln = new LayeredNetwork(numAttr); 
         // ln.run(problem);

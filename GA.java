@@ -12,7 +12,12 @@ import java.io.*;
 import java.util.*;
 
 public class GA {	
-	private static NeuralNetwork network;
+	private static final int PERCEPTRON = 1;
+	private static final int LAYERED = 2;
+
+	private static NeuralNetwork perceptron;
+	private static LayeredNetwork layeredNet;
+	private static int networkType;
 
 	private static int numIndividuals;
 	private static double[][] individuals;
@@ -31,13 +36,13 @@ public class GA {
 	private static double bestScore = 0.;
 	private	static double[] bestIndividual;
 
-	private static double totalScore; //total current score, used to calc percentages
+	private static int numWeights;
 
 	public GA() {
 
 	}
 
-	public GA(int numIndv, double mutProb, int iters, double crossProb, int numIn, int numOut) {
+	public GA(int numIndv, double mutProb, int iters, double crossProb, int numIn, int numOut, String type) {
 		numIndividuals = numIndv;
 		mutationProb = mutProb;
 		iterations = iters;
@@ -45,13 +50,21 @@ public class GA {
 		numInputs = numIn;
 		numOutputs = numOut;
 
-		totalScore = 0;
 		rankings = new double[numIndividuals];
-		network = new NeuralNetwork(numIn, scores);
+
+		if (type.equals("l")) {
+			networkType = LAYERED;
+			layeredNet = new LayeredNetwork(numIn);
+			numWeights = (numIn + numOut) * layeredNet.getNumHiddenNodes();
+		} else {
+			networkType = PERCEPTRON;
+			perceptron = new NeuralNetwork(numIn);
+			numWeights = numIn * numIn * numOut;
+		}
 	}
 
 	// Performs crossover between two parents, and returns two children
-	private static double[][] crossover(double[] parent1, double[] parent2, int numWeights) {
+	private static double[][] crossover(double[] parent1, double[] parent2) {
 		int randomNum;
 		double[][] children = new double[2][numWeights+1];
 
@@ -72,12 +85,16 @@ public class GA {
 	}
 
 	// loop through individual and randomly mutate
-	private static double[] mutate(double[] indiv, int numWeights) {
+	private static double[] mutate(double[] indiv) {
 		double randomNum;
 		for (int i = 0; i < numWeights; i++) {
 			randomNum = rand.nextDouble();
 			if (randomNum <= mutationProb) {
-				indiv[i] = network.getRandomWeight();
+				if (networkType == LAYERED) {
+					indiv[i] = layeredNet.getRandomWeight();
+					continue;
+				}
+				indiv[i] = perceptron.getRandomWeight();
 			}
 		}
 		return indiv;
@@ -133,7 +150,7 @@ public class GA {
 		return individuals[chosenOne];
 	}
 
-	private static void printIndividual(double[] indiv, int numWeights) {
+	private static void printIndividual(double[] indiv) {
 		for (int i = 0; i < numWeights; i++) {
 			if (i == 0) System.out.print(indiv[i]);
 			else System.out.print(", " + indiv[i]);	
@@ -141,32 +158,36 @@ public class GA {
 		System.out.println();
 	}
 
-	private static void initPopulation(int numWeights) {
+	private static void initPopulation() {
 		individuals = new double[numIndividuals][numWeights];
 		// Initialize all variables to true or false randomly
 		for (int i = 0; i < numIndividuals; i++) {
 			for (int j = 0; j < numWeights; j++) {
-                //do weight initiliazation from weight ranges   
-                individuals[i][j] = network.getRandomWeight();
+                //do weight initiliazation from weight ranges  
+                if (networkType == LAYERED) {
+					individuals[i][j] = layeredNet.getRandomWeight();
+					continue;
+				}
+				individuals[i][j] = perceptron.getRandomWeight();
 			}
 		}
 	}
 
-	public static void printResults(String fileName, int numWeights, int numProblems) {
+	public static void printResults(String fileName, int numProblems) {
 		double percent = bestScore / (double)numProblems;
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
 		System.out.println("Number of Output nodes: " + numOutputs);
 		System.out.println("--------------------------------------");
 		System.out.format("Clauses satisfied: %d -> %%%.1f\n", (int)bestScore, percent*100);
-		System.out.println("Assignment of weights: ");
-		printIndividual(bestIndividual, numWeights);
+		// System.out.println("Assignment of weights: ");
+		// printIndividual(bestIndividual);
 		System.out.println("Found in iteration: " + bestIteration);
 		System.out.println("I gave iterations of: " + iterations);
 	}
 
 	// Replaces old generation with new generation
-	private static void replaceGeneration(double[][] newGeneration, int numWeights) {
+	private static void replaceGeneration(double[][] newGeneration) {
 		for (int i = 0; i < numIndividuals; i++) {
 			for (int j = 0; j < numWeights; j++) {
 				individuals[i][j] = newGeneration[i][j];
@@ -174,27 +195,31 @@ public class GA {
 		}
 	}
 
-	public static void runGA(Problem problem, int numWeights) {
+	public static void runGA(Problem problem) {
 		int generationCount = 1;
 		double score = 0.;
 		double[][] newGeneration = new double[numIndividuals][numWeights];
 		scores = new double[numIndividuals];
 		double randomNum;
 
-		initPopulation(numWeights);
+		initPopulation();
 		while (generationCount <= iterations) {
 			// Evaluate each individual according to the fitness funciton
-			totalScore = 0.;
 			for (int i = 0; i < numIndividuals; i++) {
-				network.changeWeights(numInputs, numOutputs, individuals[i]);
-				score = network.run(problem);
+				if (networkType == LAYERED) {
+					layeredNet.changeWeights(numInputs, numOutputs, individuals[i]);
+					score = layeredNet.run(problem);
+				} else {
+					perceptron.changeWeights(numInputs, numOutputs, individuals[i]);
+					score = perceptron.run(problem);
+				}
+
 				if (score >= bestScore) {
 					bestIteration = generationCount;
 					bestScore = score;
 					bestIndividual = individuals[i];
 				}
 				scores[i] = score;
-				totalScore += score;
 			}
 
 			rankGeneration();
@@ -207,7 +232,7 @@ public class GA {
 				// preform crossover
 				randomNum = rand.nextDouble();
 				if (randomNum <= crossoverProb) {
-					double[][] children = crossover(parent1, parent2, numWeights);
+					double[][] children = crossover(parent1, parent2);
 					newGeneration[i] = children[0];
 					newGeneration[i+1] = children[1];
 				} else {
@@ -216,11 +241,11 @@ public class GA {
 				}
 
 				// Perform mutation
-				newGeneration[i] = mutate(newGeneration[i], numWeights);
-				newGeneration[i+1] = mutate(newGeneration[i+1], numWeights);
+				newGeneration[i] = mutate(newGeneration[i]);
+				newGeneration[i+1] = mutate(newGeneration[i+1]);
 			}
 
-			replaceGeneration(newGeneration, numWeights);
+			replaceGeneration(newGeneration);
 			generationCount++;
 		}
 	}

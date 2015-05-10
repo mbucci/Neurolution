@@ -56,8 +56,7 @@ public class Network
                 double value;
                 if (weights == null) {
                     //do weight initiliazation from weight ranges   
-                    value = this.rand.nextDouble() * WEIGHT_HIGH;
-                    value -= WEIGHT_OFF;
+                    value = getRandomWeight();
                 } else {
                     // Get the correct index frm the list of weights
                     // by calculating the offset; for every input node,
@@ -87,8 +86,7 @@ public class Network
                 double value;
                 if (weights == null) {
                     //do weight initiliazation from weight ranges   
-                    value = this.rand.nextDouble() * WEIGHT_HIGH;
-                    value -= WEIGHT_OFF;
+                    value = getRandomWeight();
                 } else {
                     // Get the correct index frm the list of weights
                     // by calculating the offset; for every input node,
@@ -131,4 +129,10 @@ public class Network
     }
 
     public int getNumHiddenNodes() { return this.numHiddenNodes; }
+
+    public double getRandomWeight() {
+        double value = this.rand.nextDouble() * WEIGHT_HIGH;
+        value -= WEIGHT_OFF;
+        return value;
+    }
 }
