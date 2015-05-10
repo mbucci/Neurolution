@@ -16,7 +16,7 @@ public class Neurolution
 
 	private static final double MUTATION_PROB = .1;
 	private static final double CROSSOVER_PROB = .7;
-	private static final int NUM_INPUT = 12;
+	private static final int NUM_INPUT = 11;
 	private static final int NUM_OUTPUT = 10;
 	private static final int NUM_IND = 100;
 	private static final int NUM_WEIGHTS = 120;
@@ -31,12 +31,6 @@ public class Neurolution
     // private static int numInput;
     // private static int numOutput;
     
-
-
-int numIndv, double mutProb, int iters, double crossProb, int numIn, int numOut
-
-
-
     /**
      * Main Function
      */
@@ -56,11 +50,12 @@ int numIndv, double mutProb, int iters, double crossProb, int numIn, int numOut
         problem = new Problem(testFile);
         problem.splitIntoTrainAndTest();
         numAttr = problem.getNumAttributes();
-        // System.out.println("Num Attributes: " + numAttr);
-        // System.out.println("Num Problems: " + problem.getNumProblems());
+        System.out.println("Num Attributes: " + numAttr);
+        System.out.println("Num Problems: " + problem.getNumProblems());
 
         ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, NUM_OUTPUT);
         ga.runGA(problem, NUM_WEIGHTS);
+        ga.printResults(args[0], NUM_WEIGHTS);
 
         // LayeredNetwork ln = new LayeredNetwork(numAttr); 
         // ln.run(problem);

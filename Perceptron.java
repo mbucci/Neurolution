@@ -43,8 +43,7 @@ public class Perceptron
                 double value;
                 if (weights == null) {
                     //do weight initiliazation from weight ranges   
-                    value = this.rand.nextDouble() * WEIGHT_HIGH;
-                    value -= WEIGHT_OFF;
+                    value = getRandomWeight();
                 } else value = weights[numOutput*i + j];
 
                 Edge newEdge = new Edge(i, j, value);
@@ -64,5 +63,11 @@ public class Perceptron
     
     public double getWeight(int inID, int outID) {
         return this.network.get(inID).get(outID).getWeight();
+    }
+
+    public double getRandomWeight() {
+        double value = this.rand.nextDouble() * WEIGHT_HIGH;
+        value -= WEIGHT_OFF;
+        return value;
     }
 }
