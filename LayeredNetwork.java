@@ -61,6 +61,7 @@ public class LayeredNetwork extends Network
                 // Calculate sum of weighted inputs for every hidden node
                 double weightedInputs = 0.0;
                 int iID = 0;
+                
                 for (Double val : temp.getAttributes()) {
                     weightedInputs += super.getWeightedInput(iID, hidID, val, "hidden");
                     iID++;

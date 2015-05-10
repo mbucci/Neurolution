@@ -59,7 +59,7 @@ public class GA {
 		} else {
 			networkType = PERCEPTRON;
 			perceptron = new NeuralNetwork(numIn);
-			numWeights = numIn * numIn * numOut;
+			numWeights = numIn * numOut;
 		}
 	}
 
@@ -175,8 +175,8 @@ public class GA {
 		System.out.println("BESTSCORE: " + bestScore);
 		System.out.println("Num correct " + numSat);
 		// System.out.println("Total: " + )
-		System.out.println("Assignment of weights: ");
-		printIndividual(bestIndividual, numWeights);
+		// System.out.println("Assignment of weights: ");
+		// printIndividual(bestIndividual);
 		System.out.println("Found in iteration: " + bestIteration);
 		System.out.println("I gave iterations of: " + iterations);
 	}
@@ -207,12 +207,13 @@ public class GA {
 				} else {
 					perceptron.changeWeights(numInputs, numOutputs, individuals[i]);
 					score = perceptron.run(problem);
+					numSat = perceptron.numCorrect;
 				}
 
 				if (score >= bestScore) {
 					bestIteration = generationCount;
 					bestScore = score;
-					numSat = network.numCorrect;
+					
 					bestIndividual = individuals[i];
 				}
 				scores[i] = score;

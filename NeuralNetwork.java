@@ -29,16 +29,16 @@ public class NeuralNetwork extends Perceptron
     //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
     public NeuralNetwork(int numAttr, double[] initialWeights) {
         super();
-        this.inputNodes = (int) Math.pow(numAttr, 2);
+        this.inputNodes = numAttr; // (int) Math.pow(numAttr, 2);
         if (initialWeights == null) super.initWeights(this.inputNodes, OUT_NODES);
         else super.initWeights(this.inputNodes, OUT_NODES, initialWeights);
     }
-    
     
     //Main function for NN. Runs perceptron NN on a given problem
     public double run(Problem prob) {
         
         this.numCorrect = 0;
+        this.totalError = 0;
         ListIterator<Clause> lit = prob.getIterator();
         while (lit.hasNext()) {
             double[] target = new double[OUT_NODES];
@@ -53,12 +53,18 @@ public class NeuralNetwork extends Perceptron
                 //Use a given attribute N (number of attribute) times
                 double weightedInputs = 0.0;
                 int iID = 0;
+
                 for (Double val : temp.getAttributes()) {
-                    for (int i = 0; i < prob.getNumAttributes(); i++) {
-                        weightedInputs += super.getWeightedInput(iID + i, oID, val);
-                    } 
+                    weightedInputs += super.getWeightedInput(iID, oID, val);
                     iID++;
                 }
+
+                // for (Double val : temp.getAttributes()) {
+                //     for (int i = 0; i < prob.getNumAttributes(); i++) {
+                //         weightedInputs += super.getWeightedInput(iID + i, oID, val);
+                //     } 
+                //     iID++;
+                // }
                 
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);
