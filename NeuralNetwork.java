@@ -109,7 +109,7 @@ public class NeuralNetwork extends Perceptron
         }
         if (target[highIndex] == 1.0) { 
             this.numCorrect++;
-            System.out.println("FOUND ONE");
+            // System.out.println("FOUND ONE");
         }
     }
 
