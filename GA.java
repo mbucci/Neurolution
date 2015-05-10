@@ -32,7 +32,7 @@ public class GA {
 	private static Random rand = new Random();
 
 	private static int bestIteration = 0;
-	private static double bestScore = 0.;
+	private static double bestScore = Double.MAX_VALUE;
 	private	static double[] bestIndividual;
 
 	private static int numWeights;
@@ -117,7 +117,7 @@ public class GA {
 		while (rankings[i] != score) {
 			i++;
 		}
-		return i + 1;
+		return rankings.length - i;
 	}
 
 	private static void printranks() {
@@ -205,7 +205,7 @@ public class GA {
 					score = perceptron.run(problem);
 				}
 
-				if (score >= bestScore) {
+				if (score <= bestScore) {
 					bestIteration = generationCount;
 					bestScore = score;
 					bestIndividual = individuals[i];
@@ -216,6 +216,7 @@ public class GA {
 
 			//sorts the ranking array
 			Arrays.sort(rankings);
+			printranks();
 
 			// Create the new generation
 			for (int i = 0; i < numIndividuals; i+=2) {

@@ -36,9 +36,10 @@ public class NeuralNetwork extends Perceptron
 
     
     //Main function for NN. Runs perceptron NN on a given problem
-    public int run(Problem prob) {
-        
+    public double run(Problem prob) {
         this.numCorrect = 0;
+        double totalError = 0.;
+        
         ListIterator<Clause> lit = prob.getIterator();
         while (lit.hasNext()) {
             double[] target = new double[OUT_NODES];
@@ -63,10 +64,13 @@ public class NeuralNetwork extends Perceptron
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);
                 double error = calculateError(oID, output[oID], target);
+                // System.out.println(error);
+                totalError+=error;
             }
             calculateResults(output, target);
         }
-        return this.numCorrect;
+        // return this.numCorrect;
+        return totalError;
     }
     
     
@@ -79,7 +83,7 @@ public class NeuralNetwork extends Perceptron
     
     //Calculate error for a given output node, output value and target value.
     private double calculateError(int outID, double outVal, double[] target) {
-        return target[outID] - outVal;
+        return ((target[outID] - outVal)*(target[outID] - outVal));
     }
     
     
