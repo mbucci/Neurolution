@@ -6,6 +6,7 @@ JC = javac
 
 CLASSES = \
 	NeuralNetwork.java\
+	LayeredNetwork.java\
 	Network.java\
 	Neurolution.java\
 	Edge.java\

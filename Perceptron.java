@@ -45,7 +45,7 @@ public class Perceptron
                     //do weight initiliazation from weight ranges   
                     value = this.rand.nextDouble() * WEIGHT_HIGH;
                     value -= WEIGHT_OFF;
-                } else value = weights[i];
+                } else value = weights[numOutput*i + j];
 
                 Edge newEdge = new Edge(i, j, value);
                 edgeList.add(newEdge);

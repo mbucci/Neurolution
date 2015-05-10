@@ -2,8 +2,8 @@
  * 
  * 
  * Max Bucci, Nikki Morin, Megan Maher
- * Created: 4/13/15
- * Last Modified: 4/13/15
+ * Created: 5/7/15
+ * Last Modified: 5/7/15
  * 
  */
 
@@ -17,17 +17,16 @@ public class Neurolution
     private static File testFile;
     private static int numAttr;
     
-    private static int outputNodes;
-    private static int epochs;
-    private static double learningRate;
-    private static int numCorrect;
+    private static int generations;
+    private static double mutationProb;
+    private static double crossoverProb;
     
     /**
      * Main Function
      */
     public static void main (String[] args) {
         
-        // if (args.length != 5) {
+        // if (args.length != 4) {
         //     System.out.println("Bad Input: Wrong number of arguments");
         //     System.exit(0);
         // }
@@ -37,22 +36,19 @@ public class Neurolution
         // mutationProb = Double.parseDouble(args[2]);
         // crossoverProb = new File(args[3]);
         
-        // if (outputNodes != 1 && outputNodes != 10) {
-        //     System.out.println("Bad Input: " + outputNodes + ". Value must be 1 or 10");
-        //     System.exit(1);
-        // }
-        
-        // NNRunner runner = new NNRunner(outputNodes, epochs, learningRate);
         problem = new Problem(testFile);
+        problem.splitIntoTrainAndTest();
         numAttr = problem.getNumAttributes();
-        System.out.println("numattr: " + numAttr);
-        System.out.println("numprob: " + problem.getNumProblems());
+        System.out.println("Num Attributes: " + numAttr);
+        System.out.println("Num Problems: " + problem.getNumProblems());
 
-        NeuralNetwork nn = new NeuralNetwork(numAttr); 
+        LayeredNetwork ln = new LayeredNetwork(numAttr); 
+        ln.run(problem);
+        ln.printResults(problem); 
+
+        NeuralNetwork nn = new NeuralNetwork(numAttr);
         nn.run(problem);
-        nn.printResults(problem);       
-        // runner.run(trainProb);
-        // runner.run(testProb);
+        nn.printResults(problem);     
     }
 }
 
