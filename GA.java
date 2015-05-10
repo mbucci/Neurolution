@@ -186,7 +186,7 @@ public class GA {
 			// Evaluate each individual according to the fitness funciton
 			totalScore = 0.;
 			for (int i = 0; i < numIndividuals; i++) {
-				network.initWeights(numInputs, numOutputs, individuals[i]);
+				network.changeWeights(numInputs, numOutputs, individuals[i]);
 				score = network.run(problem);
 				if (score >= bestScore) {
 					bestIteration = generationCount;
