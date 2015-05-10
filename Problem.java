@@ -15,9 +15,16 @@ import java.io.*;
 
 public class Problem
 {
+    private static final double TRAIN_TEST_RATIO = .8;
+
     private int numProblems;         //number of problem clauses
     private int numAttributes;       //number of attributes per clause
     private List<Clause> problem;    //Problem data structure
+
+    private List<Clause> train;
+    private List<Clause> test;
+    private int numTrain;
+    private int numTest;
     
     
     /**
@@ -25,6 +32,8 @@ public class Problem
      */
     public Problem(File f) {
         this.problem = new ArrayList<Clause>();
+        this.train = new ArrayList<Clause>();
+        this.test = new ArrayList<Clause>();
         this.numProblems = 0;
         this.numAttributes = 0;
         readFile(f);
@@ -106,6 +115,14 @@ public class Problem
         }
     }
 
+    public void splitIntoTrainAndTest() {
+        int splitIndex = (int) ((double)numProblems * TRAIN_TEST_RATIO);
+        train = new ArrayList<Clause>(problem.subList(0, splitIndex));
+        test = new ArrayList<Clause>(problem.subList(splitIndex, numProblems));
+        this.numTrain = splitIndex;
+        this.numTest = numProblems - numTrain;
+    }
+
     public void print() {
         for (Clause c : problem) {
             c.print();
@@ -114,6 +131,10 @@ public class Problem
     }    
     
     public int getNumProblems() { return this.numProblems; }
+    public int getNumTrain() { return this.numTrain; }
+    public int getNumTest() { return this.numTest; }
     public int getNumAttributes() { return this.numAttributes; }
     public ListIterator<Clause> getIterator() { return this.problem.listIterator(); }
+    public ListIterator<Clause> getTrainIterator() { return this.train.listIterator(); }
+    public ListIterator<Clause> getTestIterator() { return this.test.listIterator(); }
 }

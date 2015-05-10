@@ -96,4 +96,10 @@ public class NeuralNetwork extends Perceptron
         }
         if (target[highIndex] == 1.0) this.numCorrect++;
     }
+
+    public void printResults(Problem prob) {
+        System.out.println("\n*_*_*_*_* PERCEPTRON RESULTS *_*_*_*_*");
+         double percentCorrect = 100 * (double)this.numCorrect / (double)prob.getNumProblems();
+         System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
+     }
 }
