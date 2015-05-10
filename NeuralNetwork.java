@@ -69,16 +69,17 @@ public class NeuralNetwork extends Perceptron
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);
                 double error = calculateError(oID, output[oID], target);
-                totalError += error;
+                totalError += calculateMeanError(error);
             }
             calculateResults(output, target);
         }
-        double result = calculateMeanError();
+        double result = totalError;
+        // System.out.println("Total error: " + totalError);
         return result;
     }
 
-    private double calculateMeanError() {
-        double result = Math.pow(totalError, 2);
+    private double calculateMeanError(double error) {
+        double result = Math.pow(error, 2);
         result = 1 / result;
         return result;
     }
