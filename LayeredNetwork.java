@@ -31,7 +31,7 @@ public class LayeredNetwork extends Network
         this.inputNodes = numAttr;
         // this.inputNodes = (int) Math.pow(numAttr, 2);
         if (initialWeights == null) super.initWeights(this.inputNodes, OUT_NODES);
-        else super.initWeights(this.inputNodes, OUT_NODES, initialWeights);
+        else super.initWeights(this.inputNodes, OUT_NODES, initialWeights, true);
     }
     
     

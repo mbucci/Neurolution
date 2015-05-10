@@ -48,13 +48,13 @@ public class Neurolution
         ga.runGA(problem, NUM_WEIGHTS);
         ga.printResults(args[0], NUM_WEIGHTS, problem.getNumProblems());
 
-        LayeredNetwork ln = new LayeredNetwork(numAttr); 
-        ln.run(problem);
-        ln.printResults(problem); 
+        // LayeredNetwork ln = new LayeredNetwork(numAttr); 
+        // ln.run(problem);
+        // ln.printResults(problem); 
 
-        NeuralNetwork nn = new NeuralNetwork(numAttr);
-        nn.run(problem);
-        nn.printResults(problem);     
+        // NeuralNetwork nn = new NeuralNetwork(numAttr);
+        // nn.run(problem);
+        // nn.printResults(problem);     
     }
 }
 
