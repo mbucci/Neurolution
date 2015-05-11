@@ -32,7 +32,9 @@ public class NeuralNetwork extends Perceptron
         if (initialWeights == null) super.initWeights(this.inputNodes);
         else super.initWeights(this.inputNodes, initialWeights);
 
-        this.numWeights = this.inputNodes * OUT_NODES;
+        this.numWeights = this.inputNodes * this.inputNodes * OUT_NODES;
+        // this.numWeights = this.inputNodes * OUT_NODES;
+
     }
 
     //Main function for NN. Runs perceptron NN on a given problem
@@ -56,17 +58,17 @@ public class NeuralNetwork extends Perceptron
                 double weightedInputs = 0.0;
                 int iID = 0;
 
-                for (Double val : temp.getAttributes()) {
-                    weightedInputs += super.getWeightedInput(iID, oID, val);
-                    iID++;
-                }
-
                 // for (Double val : temp.getAttributes()) {
-                //     for (int i = 0; i < prob.getNumAttributes(); i++) {
-                //         weightedInputs += super.getWeightedInput(iID + i, oID, val);
-                //     } 
+                //     weightedInputs += super.getWeightedInput(iID, oID, val);
                 //     iID++;
                 // }
+
+                for (Double val : temp.getAttributes()) {
+                    for (int i = 0; i < prob.getNumAttributes(); i++) {
+                        weightedInputs += super.getWeightedInput(iID + i, oID, val);
+                    } 
+                    iID++;
+                }
                 
                 //**********Calculate error and output value**********//
                 output[oID] = calculateActivation(weightedInputs);

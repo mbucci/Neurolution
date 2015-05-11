@@ -105,6 +105,7 @@ public class LayeredNetwork extends Network
 
             calculateResults(outputFinal, target);
         }
+        // System.out.println("Correct: " + numCorrect);
         return totalError;
     }
     

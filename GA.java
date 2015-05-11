@@ -198,6 +198,7 @@ public class GA {
 
 		initPopulation();
 		while (generationCount <= iterations) {
+			System.out.println("Bestscore = " + bestNumCorrect);
 			// Evaluate each individual according to the fitness funciton
 			for (int i = 0; i < numIndividuals; i++) {
 				if (networkType == LAYERED) {
