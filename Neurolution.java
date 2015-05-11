@@ -13,7 +13,7 @@ public class Neurolution
 {
 	private static GA ga;
 
-	private static final double MUTATION_PROB = .1;
+	private static final double MUTATION_PROB = .15;
 	private static final double CROSSOVER_PROB = .7;
 	private static final int NUM_INPUT = 11;
 	private static final int NUM_IND = 100;

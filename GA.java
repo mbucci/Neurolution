@@ -233,7 +233,8 @@ public class GA {
 				// scores[i] = score;
 				// rankings[i] = score;
 
-				if (num_correct >= bestNumCorrect) {
+				if (num_correct > bestNumCorrect || 
+					(num_correct == bestNumCorrect && score < bestScore)) {
 					bestIteration = generationCount;
 					bestScore = score;
 					
