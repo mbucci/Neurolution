@@ -168,6 +168,7 @@ public class GA {
 
 	public static void printResults(String fileName, int numProblems) {
 		double percent = bestNumCorrect / (double)numProblems;
+		System.out.println("--------------------------------------");
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
 		System.out.println("Number of Problems: " + numProblems);
@@ -178,6 +179,7 @@ public class GA {
 		// printIndividual(bestIndividual);
 		System.out.println("Found in iteration: " + bestIteration);
 		System.out.println("I gave iterations of: " + iterations);
+		System.out.println("--------------------------------------");
 	}
 
 	// Replaces old generation with new generation
@@ -199,9 +201,9 @@ public class GA {
 
 		initPopulation();
 		while (generationCount <= iterations) {
-			System.out.println("Bestscore = " + bestNumCorrect);
+			// System.out.println("Bestscore = " + bestNumCorrect);
 			// Evaluate each individual according to the fitness funciton
-			System.out.printf("Error: %.1f, Num: %d\n", bestScore, bestNumCorrect);
+			// System.out.printf("Error: %.1f, Num: %d\n", bestScore, bestNumCorrect);
 			for (int i = 0; i < numIndividuals; i++) {
 				if (networkType == LAYERED) {
 					LayeredNetwork temp = new LayeredNetwork(numInputs, individuals[i]);
