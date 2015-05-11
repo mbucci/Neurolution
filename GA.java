@@ -117,7 +117,7 @@ public class GA {
 		while (rankings[i] != score) {
 			i++;
 		}
-		return rankings.length - i;
+		return i + 1;
 	}
 
 	private static void printranks() {
@@ -139,6 +139,7 @@ public class GA {
 
 		randomNum = rand.nextInt(currSum);
 		int chosenOne = chooseSpecified(randomNum, sums);
+		// System.out.println("Chosen = " + chosenOne);
 		return individuals[chosenOne];
 	}
 
@@ -200,29 +201,48 @@ public class GA {
 		while (generationCount <= iterations) {
 			System.out.println("Bestscore = " + bestNumCorrect);
 			// Evaluate each individual according to the fitness funciton
+			System.out.printf("Error: %.1f, Num: %d\n", bestScore, bestNumCorrect);
 			for (int i = 0; i < numIndividuals; i++) {
 				if (networkType == LAYERED) {
-					layeredNet.changeWeights(numInputs, individuals[i]);
-					score = layeredNet.run(problem);
-					num_correct = layeredNet.getNumCorrect();
+					LayeredNetwork temp = new LayeredNetwork(numInputs, individuals[i]);
+					score = temp.run(problem);
+					num_correct = temp.getNumCorrect();
+					// layeredNet.changeWeights(numInputs, individuals[i]);
+					// score = layeredNet.run(problem);
+					// num_correct = layeredNet.getNumCorrect();
 					// System.out.println(num_correct);
 				} else {
-					perceptron.changeWeights(numInputs, individuals[i]);
-					score = perceptron.run(problem);
-					num_correct = perceptron.getNumCorrect();
+					NeuralNetwork temp = new NeuralNetwork(numInputs, individuals[i]);
+					score = temp.run(problem);
+					num_correct = temp.getNumCorrect();
+					// perceptron.changeWeights(numInputs, individuals[i]);
+					// score = perceptron.run(problem);
+					// num_correct = perceptron.getNumCorrect();
 					// System.out.println(num_correct);
 
 				}
 
-				if (score <= bestScore) {
+				// if (score <= bestScore) {
+				// 	bestIteration = generationCount;
+				// 	bestScore = score;
+					
+				// 	bestIndividual = individuals[i];
+				// 	bestNumCorrect = num_correct;
+				// }
+
+				// scores[i] = score;
+				// rankings[i] = score;
+
+				if (num_correct >= bestNumCorrect) {
 					bestIteration = generationCount;
 					bestScore = score;
 					
 					bestIndividual = individuals[i];
 					bestNumCorrect = num_correct;
 				}
-				scores[i] = score;
-				rankings[i] = score;
+
+				scores[i] = (double)num_correct;
+				rankings[i] = (double)num_correct;
 			}
 
 			//sorts the ranking array

@@ -107,6 +107,7 @@ public class LayeredNetwork extends Network
         }
         // System.out.println("Correct: " + numCorrect);
         return totalError;
+        // return (double)this.numCorrect;
     }
     
     
