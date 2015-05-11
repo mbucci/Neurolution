@@ -11,9 +11,6 @@ import java.util.*;
 
 public class LayeredNetwork extends Network
 {   
-    //Perceptron constants
-
-
     private int inputNodes;       //Algorithm specific variables
     private int numCorrect;       //Keeps track of performance
     private int numWeights;
@@ -52,9 +49,6 @@ public class LayeredNetwork extends Network
             // index of the target output vector to 1
             Clause temp = lit.next();
             target[temp.getQuality()] = 1;
-            
-            // System.out.println("\n *************** START **************");
-            // temp.print();
 
             // For every hidden layer node, calculate the sum of the weighted inputs
             // @TODO change to 144? rn is twelve...
@@ -72,15 +66,6 @@ public class LayeredNetwork extends Network
                 outputHidden[hidID] = calculateActivation(weightedInputs);
             }
 
-            // System.out.println("OutputHidden: ");
-            // for (int i = 0; i < outputHidden.length; i++) {
-            //     System.out.print(outputHidden[i] + " ");
-            // }
-            // System.out.println("\nTarget: ");
-            // for (int i = 0; i < target.length; i++) {
-            //     System.out.print(target[i] + " ");
-            // }
-
             // For every output node, calculate the sum of the weighted inputs
             for (int oID = 0; oID < OUT_NODES; oID++) {
                 // Calculate sum of weighted inputs
@@ -96,18 +81,11 @@ public class LayeredNetwork extends Network
                 // System.out.println("Error: " + error);
 
             }
-            // System.out.println("Outputfinal: ");
-            // for (int i = 0; i < outputFinal.length; i++) {
-            //     System.out.print(outputFinal[i] + " ");
-            // }
-            
-            // System.out.println("\n*_*_*_*_*_*_*_*_*_*  END  *_*_*_*_*_*_*_*_*_\n");
 
             calculateResults(outputFinal, target);
         }
-        // System.out.println("Correct: " + numCorrect);
         return totalError;
-        // return (double)this.numCorrect;
+        //return (double)this.numCorrect;
     }
     
     
@@ -144,12 +122,6 @@ public class LayeredNetwork extends Network
          System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
     }
 
-    public int getNumWeights() {
-        return this.numWeights;
-    }
-
-    public int getNumCorrect() {
-        return this.numCorrect;
-    }
-
+    public int getNumWeights() { return this.numWeights; }
+    public int getNumCorrect() { return this.numCorrect; }
 }

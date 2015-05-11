@@ -12,7 +12,7 @@ import java.util.*;
 public class Network
 {
     private static final double WEIGHT_HIGH = 0.5;
-    private static final double WEIGHT_OFF = 0.3;
+    private static final double WEIGHT_OFF = WEIGHT_HIGH/2.0;
 
     protected static final double SIGMOID_CONSTANT = 0.0;
     protected static final int OUT_NODES = 10;
@@ -21,9 +21,8 @@ public class Network
     private Map<Integer, List<Edge>> outputLayer;   // Output nodes and their input edges
 
     private Random rand;
-    // private Map<Integer, List<Edge>> network;    //Perceptron data structure
-    private int biasNodeID;                      //ID of the bias node
-    private int numHiddenNodes;                  // Number of hidden neurons
+    private int biasNodeID;                         //ID of the bias node
+    private int numHiddenNodes;                     // Number of hidden neurons
    
     public Network() {
         this.hiddenLayer = new HashMap<Integer, List<Edge>>();

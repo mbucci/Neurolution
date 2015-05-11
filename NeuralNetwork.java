@@ -13,7 +13,7 @@ public class NeuralNetwork extends Perceptron
 {   
 
     private int inputNodes;       //Algorithm specific variables
-    public int numCorrect;       //Keeps track of performance
+    public int numCorrect;        //Keeps track of performance
     private double totalError;
     private int numWeights;
 
@@ -58,11 +58,6 @@ public class NeuralNetwork extends Perceptron
                 double weightedInputs = 0.0;
                 int iID = 0;
 
-                // for (Double val : temp.getAttributes()) {
-                //     weightedInputs += super.getWeightedInput(iID, oID, val);
-                //     iID++;
-                // }
-
                 for (Double val : temp.getAttributes()) {
                     for (int i = 0; i < prob.getNumAttributes(); i++) {
                         weightedInputs += super.getWeightedInput(iID + i, oID, val);
@@ -79,8 +74,7 @@ public class NeuralNetwork extends Perceptron
             }
             calculateResults(output, target);
         }
-        // return (double)this.numCorrect;
-        // System.out.println(this.numCorrect);
+        //return (double)this.numCorrect;
         return totalError;
     }
 
@@ -115,17 +109,12 @@ public class NeuralNetwork extends Perceptron
         }
     }
 
-    public int getNumCorrect() {
-        return this.numCorrect;
-    }
-
-    public int getNumWeights() {
-        return this.numWeights;
-    }
-
     public void printResults(Problem prob) {
         System.out.println("*_*_*_*_* NEURAL NETWORK RESULTS *_*_*_*_*");
          double percentCorrect = 100 * (double)this.numCorrect / (double)prob.getNumProblems();
          System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
     }
+    
+    public int getNumCorrect() { return this.numCorrect; }
+    public int getNumWeights() { return this.numWeights; }
 }

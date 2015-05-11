@@ -29,14 +29,8 @@ public class Neurolution
     /**
      * Main Function
      */
-
     public static void main (String[] args) {
-        
-        // if (args.length != 4) {
-        //     System.out.println("Bad Input: Wrong number of arguments");
-        //     System.exit(0);
-        // }
-        
+                
         testFile = new File(args[0]);
         generations = Integer.parseInt(args[1]);
         networkType = args[2];
@@ -49,15 +43,7 @@ public class Neurolution
 
         ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, networkType);
         ga.runGA(problem);
-        ga.printResults(args[0], problem.getNumProblems());
-
-        // LayeredNetwork ln = new LayeredNetwork(numAttr); 
-        // ln.run(problem);
-        // ln.printResults(problem); 
-
-        // NeuralNetwork nn = new NeuralNetwork(numAttr);
-        // nn.run(problem);
-        // nn.printResults(problem);     
+        ga.printResults(args[0], problem.getNumProblems());   
     }
 }
 

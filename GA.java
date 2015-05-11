@@ -277,8 +277,4 @@ public class GA {
 				System.out.println("Generation: " + generationCount + " --> " + bestNumCorrect);
 		}
 	}
-
-	public static void main(String args[]) throws Exception {
-
-	}
 }
