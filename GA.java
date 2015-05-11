@@ -14,6 +14,7 @@ import java.util.*;
 public class GA {	
 	private static final int PERCEPTRON = 1;
 	private static final int LAYERED = 2;
+	private static final int PRINT_INTERVAL = 5;
 
 	private static NeuralNetwork perceptron;
 	private static LayeredNetwork layeredNet;
@@ -199,9 +200,9 @@ public class GA {
 
 		initPopulation();
 		while (generationCount <= iterations) {
-			System.out.println("Bestscore = " + bestNumCorrect);
+			//System.out.println("Bestscore = " + bestNumCorrect);
 			// Evaluate each individual according to the fitness funciton
-			System.out.printf("Error: %.1f, Num: %d\n", bestScore, bestNumCorrect);
+			//System.out.printf("Error: %.1f, Num: %d\n", bestScore, bestNumCorrect);
 			for (int i = 0; i < numIndividuals; i++) {
 				if (networkType == LAYERED) {
 					LayeredNetwork temp = new LayeredNetwork(numInputs, individuals[i]);
@@ -272,6 +273,8 @@ public class GA {
 
 			replaceGeneration(newGeneration);
 			generationCount++;
+			if (generationCount%PRINT_INTERVAL == 0)
+				System.out.println("Generation: " + generationCount + " --> " + bestNumCorrect);
 		}
 	}
 
