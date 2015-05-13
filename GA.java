@@ -30,6 +30,7 @@ public class GA {
 
 	private static int numWeights;				// Number of weights in our NN
 	private static int numInputs;				// Number of input nodes we want in our NN
+	private static int numOutput;				// Number of output nodes in our NN
 
 	private static double[] scores;				// Holds current fitnesses of individuals
 	private static double[] rankings;			// Holds sorted fitnesses of individuals
@@ -60,11 +61,13 @@ public class GA {
 			layeredNet = new TwoLayerPerceptron(numIn);
 			//Get the number of weights from the network
 			numWeights = layeredNet.getNumWeights();
+			numOutput = layeredNet.getNumOutput();
 		} else {
 			networkType = PERCEPTRON;
 			perceptron = new Perceptron(numIn);
 			//Get the number of weights from the network
 			numWeights = perceptron.getNumWeights();
+			numOutput = perceptron.getNumOutput();
 		}
 	}
 
@@ -86,6 +89,7 @@ public class GA {
 		System.out.println("Results found for file: " + fileName);
 		System.out.println("Number of Input nodes: " + numInputs);
 		System.out.println("Number of Problems: " + numProblems);
+		System.out.println("Num weights "+ numWeights);
 		System.out.println("--------------------------------------");
 		System.out.printf("Error: %.1f\n", smallestError);
 		System.out.printf("Correctly Classified: %d ---> %%%.1f\n", bestNumCorrect, percent*100.);
@@ -153,11 +157,77 @@ public class GA {
 		return individuals[chosenOne];
 	}
 
+	// Replaces indicies from a certain parent 
+	private static double[] getChunkFromParent(double[] parent, double[] child, int outNodes, int chunk) {
+		System.out.println("GETTING CHUNK");
+		System.out.println("Parent:\n" + parent);
+		System.out.println("Child:\n" + child);
+		System.out.println("OUTPUT: " + outNodes + ", Chunk = "+chunk + ", weights = " + numWeights);
+
+		int index = chunk;
+		while (index < numWeights) {
+			System.out.println("Curr index = "+index);
+			child[index] = parent[index];
+			index += outNodes;
+		}
+		return child;
+	}
+
+
+	// Performs crossover between two parents, and returns two children
+	private static double[][] chunkCrossover(double[] parent1, double[] parent2, int outNodes) {
+
+		double[][] children = new double[2][numWeights];
+		int randomNum;
+
+		// Each element has a 50% chance of being from one parent or the other
+		// Loop through all the chunks = num output nodes
+		for (int i = 0; i < outNodes; i++) {
+			randomNum = rand.nextInt(2) + 1;
+			if (randomNum == 1) {
+				children[0] = getChunkFromParent(parent1, children[0], outNodes, i);
+				children[1] = getChunkFromParent(parent2, children[1], outNodes, i);
+			}
+			else {
+				children[0] = getChunkFromParent(parent2, children[0], outNodes, i);
+				children[1] = getChunkFromParent(parent1, children[1], outNodes, i);
+			}
+		}
+		
+		return children;
+	}
+
+	private static double[][] multiLayerChunkCrossover(double[] parent1, double[] parent2, int numHidden) {
+		int firstLayer = numInputs * numHidden;
+		int secondLayer = numHidden * numOutput;
+
+		double[] parent1_1 = new double[firstLayer];
+		double[] parent1_2 = new double[secondLayer];
+		double[] parent2_1 = new double[firstLayer];
+		double[] parent2_2 = new double[secondLayer];
+
+		System.arraycopy(parent1, 0, parent1_1, 0, firstLayer);
+		System.arraycopy(parent1, 0, parent1_2, 0, secondLayer);
+		System.arraycopy(parent2, 0, parent2_1, 0, firstLayer);
+		System.arraycopy(parent2, 0, parent2_2, 0, secondLayer);
+
+		double[][] firstHalfChildren = chunkCrossover(parent1_1, parent2_1, numHidden);
+		double[][] secondHalfChildren = chunkCrossover(parent1_2, parent2_2, numOutput);
+
+		double[][] children = new double[2][numWeights];
+		System.arraycopy(firstHalfChildren[0], 0, children[0], 0, firstLayer);
+		System.arraycopy(firstHalfChildren[1], 0, children[1], 0, firstLayer);
+		System.arraycopy(secondHalfChildren[0], 0, children[0], firstLayer, secondLayer);
+		System.arraycopy(secondHalfChildren[1], 0, children[1], firstLayer, secondLayer);
+
+		return children;
+	}
+
 
 	// Performs crossover between two parents, and returns two children
 	private static double[][] crossover(double[] parent1, double[] parent2) {
 
-		double[][] children = new double[2][numWeights+1];
+		double[][] children = new double[2][numWeights];
 		int randomNum;
 
 		// Each element has a 50% chance of being from one parent or the other
@@ -296,6 +366,7 @@ public class GA {
 				randomNum = rand.nextDouble();
 				if (randomNum <= crossoverProb) {
 					double[][] children = crossover(parent1, parent2);
+					// double[][] children = chunkCrossover(parent1, parent2, numOutput);
 					newGeneration[i] = children[0];
 					newGeneration[i+1] = children[1];
 				} else {

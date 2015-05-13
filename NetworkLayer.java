@@ -75,6 +75,7 @@ public class NetworkLayer
         }
     }
 
+    public int getNumOutput() { return OUT_NODES; }
     
     protected void setWeight(int inID, int outID, double newWeight) {
         this.network.get(inID).get(outID).setWeight(newWeight);
