@@ -27,11 +27,11 @@ public class Perceptron extends NetworkLayer
     //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
     public Perceptron(int numAttr, double[] initialWeights) {
         super();
-        this.inputNodes = (int) Math.pow(numAttr, 2);
+        this.inputNodes = numAttr * numAttr;
         if (initialWeights == null) super.initWeights(this.inputNodes);
         else super.initWeights(this.inputNodes, initialWeights);
 
-        this.numWeights = this.inputNodes * this.inputNodes * OUT_NODES;
+        this.numWeights = this.inputNodes * OUT_NODES;
     }
 
     //Main function for NN. Runs perceptron NN on a given problem
