@@ -1,5 +1,5 @@
 /*
- * Implements a Perceptron Network
+ * Implements a Perceptron Neural Network
  * 
  * Max Bucci, Nikki Morin, Megan Maher
  * Created: 4/13/15
@@ -9,103 +9,75 @@
 
 import java.util.*;
 
-public class Perceptron
-{
-    private static final double WEIGHT_HIGH = 0.5;
-    private static final double WEIGHT_OFF = WEIGHT_HIGH/2.0;
+public class Perceptron extends NetworkLayer
+{   
 
-    protected static final double SIGMOID_CONSTANT = 0.0;
-    protected static final int OUT_NODES = 10;
+    private int inputNodes;       //Algorithm specific variables
+    public int numCorrect;        //Keeps track of performance
+    private double totalError;
+    private int numWeights;
 
-    private Random rand;
-    private Map<Integer, List<Edge>> network;    //Perceptron data structure
-    private int biasNodeID;                      //ID of the bias node
-
-   
     /**
-     * Constructor. If newNet is true, weights will be a high for the weigth range, otherwise it will
-     * be specific values for the edge weights. 
-     */ 
-    public Perceptron() {
-        this.network = new HashMap<Integer, List<Edge>>();
-        this.rand = new Random();
-    }
-
-    //Use this when initializing from scratch
-    public void initWeights(int numInput) {
-        this.initWeights(numInput, null);
-    }
-
-    //Use this to change the weights of an existing network
-    public void changeWeights(int numInput, double[] weights) {
-        this.initWeights(numInput, weights, false);
-    }
-
-    //Don't use this
-    public void initWeights(int numInput, double[] weights, boolean newNet) {
-
-        if (newNet) this.biasNodeID = rand.nextInt(numInput);
-
-        for (int i = 0; i < numInput; i++) {
-            
-            List<Edge> edgeList = new ArrayList<Edge>();
-            for (int j = 0; j < OUT_NODES; j++) {
-                double value;
-                if (weights == null) value = getRandomWeight();      //initialize from weight ranges
-                else value = weights[OUT_NODES*i + j];
-
-                if (!newNet) {
-                    this.setWeight(i, j, value);
-                    return;
-                }
-
-                Edge newEdge = new Edge(i, j, value);
-                edgeList.add(newEdge);
-            }
-            this.network.put(i, edgeList);
-        }
+     * Constructor
+     */
+    public Perceptron(int numAttr) {
+        this(numAttr, null);
     }
     
-    //Given an input node ID, output node ID and input value, calculates the weighted input for
-    //that edge
-    public double getWeightedInput(int inID, int outID, double inVal) {
-        // bias node always has an input value of 1
-        if (inID == this.biasNodeID) inVal = 1.0;
-        return getWeight(inID, outID) * inVal;
-    }
-    
-    public double getWeight(int inID, int outID) {
-        return this.network.get(inID).get(outID).getWeight();
+    //Maintain N input nodes for each attribute to increase diversity. N^2 total nodes.
+    public Perceptron(int numAttr, double[] initialWeights) {
+        super();
+        this.inputNodes = (int) Math.pow(numAttr, 2);
+        if (initialWeights == null) super.initWeights(this.inputNodes);
+        else super.initWeights(this.inputNodes, initialWeights);
+
+        this.numWeights = this.inputNodes * this.inputNodes * OUT_NODES;
     }
 
-    public void initWeights(int numInput, double[] weights) {
+    //Main function for NN. Runs perceptron NN on a given problem
+    public double run(Problem prob) {
         
-        this.biasNodeID = rand.nextInt(numInput);
-        for (int i = 0; i < numInput; i++) {
+        this.numCorrect = 0;
+        this.totalError = 0.0;
+        
+        ListIterator<Clause> lit = prob.getIterator();
+        while (lit.hasNext()) {
+            double[] target = new double[OUT_NODES];
+            double[] output = new double[OUT_NODES];
             
-            List<Edge> edgeList = new ArrayList<Edge>();
-            for (int j = 0; j < OUT_NODES; j++) {
-                double value;
-                if (weights == null) {
-                    //do weight initiliazation from weight ranges   
-                    value = this.rand.nextDouble() * WEIGHT_HIGH;
-                    value -= WEIGHT_OFF;
-                } else value = weights[OUT_NODES*i + j];
+            Clause temp = lit.next();
+            target[temp.getQuality()] = 1;
+            
+            for (int oID = 0; oID < OUT_NODES; oID++) {
+                
+                //**********Calculate sum of weighted inputs**********//
+                //Use a given attribute N (number of attribute) times
+                double weightedInputs = 0.0;
+                int iID = 0;
 
-                Edge newEdge = new Edge(i, j, value);
-                edgeList.add(newEdge);
+                for (Double val : temp.getAttributes()) {
+                    for (int i = 0; i < prob.getNumAttributes(); i++) {
+                        weightedInputs += super.getWeightedInput(iID + i, oID, val);
+                    } 
+                    iID++;
+                }
+                
+                //**********Calculate error and output value**********//
+                output[oID] = calculateActivation(weightedInputs);
+                totalError += calculateError(oID, output[oID], target);
             }
-            this.network.put(i, edgeList);
+            this.numCorrect += calculateResults(output, target);
         }
+        //return (double)this.numCorrect;
+        return totalError;
     }
 
-    public double getRandomWeight() {
-        double value = this.rand.nextDouble() * WEIGHT_HIGH;
-        value -= WEIGHT_OFF;
-        return value;
+    public void printResults(Problem prob) {
+        System.out.println("*_*_*_*_* NEURAL NETWORK RESULTS *_*_*_*_*");
+         double percentCorrect = 100 * (double)this.numCorrect / (double)prob.getNumProblems();
+         System.out.println(String.format("Percent Correct: %.1f%%", percentCorrect));
     }
-
-    private void setWeight(int inID, int outID, double newWeight) {
-        this.network.get(inID).get(outID).setWeight(newWeight);
-    }
+    
+    public int getNumCorrect() { return this.numCorrect; }
+    public int getNumWeights() { return this.numWeights; }
 }

@@ -16,8 +16,8 @@ public class GA {
 	private static final int LAYERED = 2;
 	private static final int PRINT_INTERVAL = 5;
 
-	private static NeuralNetwork perceptron;
-	private static LayeredNetwork layeredNet;
+	private static Perceptron perceptron;
+	private static TwoLayerPerceptron layeredNet;
 	private static int networkType;
 
 	private static int numIndividuals;
@@ -40,10 +40,6 @@ public class GA {
 
 	private static int numWeights;
 
-	public GA() {
-
-	}
-
 	public GA(int numIndv, double mutProb, int iters, double crossProb, int numIn, String type) {
 		numIndividuals = numIndv;
 		mutationProb = mutProb;
@@ -54,12 +50,12 @@ public class GA {
 		rankings = new double[numIndividuals];
 		if (type.equals("l")) {
 			networkType = LAYERED;
-			layeredNet = new LayeredNetwork(numIn);
+			layeredNet = new TwoLayerPerceptron(numIn);
 			numWeights = layeredNet.getNumWeights();
 			// numWeights = (numIn + 10) * layeredNet.getNumHiddenNodes();
 		} else {
 			networkType = PERCEPTRON;
-			perceptron = new NeuralNetwork(numIn);
+			perceptron = new Perceptron(numIn);
 			numWeights = perceptron.getNumWeights();
 		}
 	}
@@ -92,10 +88,10 @@ public class GA {
 			randomNum = rand.nextDouble();
 			if (randomNum <= mutationProb) {
 				if (networkType == LAYERED) {
-					indiv[i] = layeredNet.getRandomWeight();
+					indiv[i] = layeredNet.getWeightFromRange();
 					continue;
 				}
-				indiv[i] = perceptron.getRandomWeight();
+				indiv[i] = perceptron.getWeightFromRange();
 			}
 		}
 		return indiv;
@@ -159,10 +155,10 @@ public class GA {
 			for (int j = 0; j < numWeights; j++) {
                 //do weight initiliazation from weight ranges  
                 if (networkType == LAYERED) {
-					individuals[i][j] = layeredNet.getRandomWeight();
+					individuals[i][j] = layeredNet.getWeightFromRange();
 					continue;
 				}
-				individuals[i][j] = perceptron.getRandomWeight();
+				individuals[i][j] = perceptron.getWeightFromRange();
 			}
 		}
 	}
@@ -204,7 +200,7 @@ public class GA {
 		while (generationCount <= iterations) {
 			for (int i = 0; i < numIndividuals; i++) {
 				if (networkType == LAYERED) {
-					LayeredNetwork temp = new LayeredNetwork(numInputs, individuals[i]);
+					TwoLayerPerceptron temp = new TwoLayerPerceptron(numInputs, individuals[i]);
 					score = temp.run(problem);
 					num_correct = temp.getNumCorrect();
 					// layeredNet.changeWeights(numInputs, individuals[i]);
@@ -212,7 +208,7 @@ public class GA {
 					// num_correct = layeredNet.getNumCorrect();
 					// System.out.println(num_correct);
 				} else {
-					NeuralNetwork temp = new NeuralNetwork(numInputs, individuals[i]);
+					Perceptron temp = new Perceptron(numInputs, individuals[i]);
 					score = temp.run(problem);
 					num_correct = temp.getNumCorrect();
 					// perceptron.changeWeights(numInputs, individuals[i]);

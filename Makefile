@@ -7,10 +7,10 @@ JC = javac
 CLASSES = \
 	Neurolution.java\
 	GA.java\
+	TwoLayerPerceptron.java\
 	LayeredNetwork.java\
-	Network.java\
-	NeuralNetwork.java\
 	Perceptron.java\
+	NetworkLayer.java\
 	Edge.java\
 	Problem.java\
 	Clause.java
