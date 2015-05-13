@@ -24,26 +24,26 @@ public class GA {
 	private static int networkType;					// will determine which network we want
 	private static int crossoverChunk;				// will determine if we want to chunk weights together in crossover
 
-	private static int numIndividuals;			// number of individuals in our population
-	private static double[][] individuals;		// Our population: array of individuals
-	private static int iterations;				// Number of times we run our GA
+	private static int numIndividuals;			    // number of individuals in our population
+	private static double[][] individuals;		    // Our population: array of individuals
+	private static int iterations;				    // Number of times we run our GA
 
-	private static double mutationProb;			// Probability that a chromosone is mutated
-	private static double crossoverProb;		// Prob. that we perform crossover on an individual
+	private static double mutationProb;			    // Probability that a chromosone is mutated
+	private static double crossoverProb;		    // Prob. that we perform crossover on an individual
+    
+	private static int numWeights;				    // Number of weights in our NN
+	private static int numInputs;				    // Number of input nodes we want in our NN
+	private static int numOutput;				    // Number of output nodes in our NN
 
-	private static int numWeights;				// Number of weights in our NN
-	private static int numInputs;				// Number of input nodes we want in our NN
-	private static int numOutput;				// Number of output nodes in our NN
-
-	private static double[] scores;				// Holds current fitnesses of individuals
-	private static double[] rankings;			// Holds sorted fitnesses of individuals
+	private static double[] scores;				    // Holds current fitnesses of individuals
+	private static double[] rankings;			    // Holds sorted fitnesses of individuals
 	private static Random rand = new Random();
 
-	private static int bestIteration = 0;		// Holds the iteration when we found our best individual
-	private static int bestNumCorrect = 0;		// Holds the best fitness: number correctly classified w/ best weights
+	private static int bestIteration = 0;		    // Holds the iteration when we found our best individual
+	private static int bestNumCorrect = 0;		    // Holds the best fitness: number correctly classified w/ best weights
 	private static double smallestError = Double.MAX_VALUE;		// Holds smallest error w/ best weights
 	
-	private	static double[] bestIndividual;		// Our best individual found so far
+	private	static double[] bestIndividual;		    // Our best individual found so far
 
 
 	// Class Constructor
@@ -106,8 +106,8 @@ public class GA {
 		System.out.println("Found in iteration: " + bestIteration);
 		System.out.println("I gave iterations of: " + iterations);
 		System.out.println("--------------------------------------");
-		System.out.println("Assignment of weights: ");
-		printIndividual(bestIndividual);
+		//System.out.println("Assignment of weights: ");
+		//printIndividual(bestIndividual);
 		System.out.println("--------------------------------------");
 	}
 

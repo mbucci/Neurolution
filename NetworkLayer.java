@@ -130,8 +130,8 @@ public class NetworkLayer
             correct = ((target[highIndex+1] == 1.0) || (target[highIndex+2] == 1.0)) ? true : false;
         else if (highIndex == target.length)
             correct = ((target[highIndex-1] == 1.0) || (target[highIndex-2] == 1.0)) ? true : false;
-        else 
-            correct = (target[highIndex] == 1.0) ? true : false;
+
+        if (target[highIndex] == 1.0) correct = true;
 
         return (correct) ? 1 : 0;
     }
