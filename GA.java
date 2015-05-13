@@ -167,13 +167,8 @@ public class GA {
 		return individuals[chosenOne];
 	}
 
-	private static void printMe(double[] a) {
-		for (int i = 0; i < a.length; i++) {
-			System.out.print(a[i] + ", ");
-		}
-	}
-
-	// Replaces indicies from a certain parent 
+	// Replaces all elements of the "chunk" in the child with corresponding index in parent
+	// Offset is the "chunk" number, and every <outNodes>'th element will be part of the chunk
 	private static double[] getChunkFromParent(double[] parent, double[] child, int inNodes, int outNodes, int chunk) {
 		int index = chunk;
 		while (index < (inNodes * outNodes)) {
@@ -184,7 +179,8 @@ public class GA {
 	}
 
 
-	// Performs crossover between two parents, and returns two children
+	// Performs crossover between two parents based on groups of weights based on output node
+	// All weights going to output node 1 are grouped together... etc.
 	private static double[][] chunkCrossover(double[] parent1, double[] parent2, int inNodes, int outNodes) {
 
 		double[][] children = new double[2][inNodes*outNodes];
@@ -207,6 +203,8 @@ public class GA {
 		return children;
 	}
 
+	// Breaks up each individual into two separate individual based on layer of weights, 
+	//		performs chunk crossover, then groups back together
 	private static double[][] multiLayerChunkCrossover(double[] parent1, double[] parent2, int outNodes, int numHidden) {
 		int firstLayer = numInputs * numHidden;
 		int secondLayer = numHidden * outNodes;
@@ -216,14 +214,17 @@ public class GA {
 		double[] parent2_1 = new double[firstLayer];
 		double[] parent2_2 = new double[secondLayer];
 
+		// Divides up two parents into four parents based on the two layers
 		System.arraycopy(parent1, 0, parent1_1, 0, firstLayer);
 		System.arraycopy(parent1, 0, parent1_2, 0, secondLayer);
 		System.arraycopy(parent2, 0, parent2_1, 0, firstLayer);
 		System.arraycopy(parent2, 0, parent2_2, 0, secondLayer);
 
+		// First get children based on first layer chunks, then second layer chunks
 		double[][] firstHalfChildren = chunkCrossover(parent1_1, parent2_1, numInputs, numHidden);
 		double[][] secondHalfChildren = chunkCrossover(parent1_2, parent2_2, numHidden, outNodes);
 
+		// Piece children back together
 		double[][] children = new double[2][numWeights];
 		System.arraycopy(firstHalfChildren[0], 0, children[0], 0, firstLayer);
 		System.arraycopy(firstHalfChildren[1], 0, children[1], 0, firstLayer);
