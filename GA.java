@@ -260,10 +260,8 @@ public class GA {
 
 	// Loop through individual and randomly mutate
 	private static double[] mutate(double[] indiv) {
-
 		double randomNum;
 		for (int i = 0; i < numWeights; i++) {
-
 			randomNum = rand.nextDouble();
 			if (randomNum <= mutationProb) {
 				// If we want to mutate, generate a random value from the range
@@ -382,13 +380,12 @@ public class GA {
 					if (crossoverChunk == NOT_CHUNKED) {
 						children = crossover(parent1, parent2);
 					} else if (networkType == PERCEPTRON) {
-						children = chunkCrossover(parent1, parent2, numInputs, numOutput);
+						children = chunkCrossover(parent1, parent2, numInputs*numInputs, numOutput);
 					} else if (networkType == LAYERED) {
 						children = multiLayerChunkCrossover(parent1, parent2, numOutput, layeredNet.getNumHiddenNodes());
 					} else {
 						System.out.println("ERROR");
 					}
-
 					newGeneration[i] = children[0];
 					newGeneration[i+1] = children[1];
 				} else {
