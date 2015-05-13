@@ -42,6 +42,10 @@ public class Neurolution
 	// If we want to run -> specified by user input
 	private static String networkType;
 
+	// If we want to "chunk" our crossovers or not:
+	// 		chunk = group weights that go to the same node together
+	private static String crossoverChunk;
+
 	/**
 	 * Main Function
 	 */
@@ -50,13 +54,14 @@ public class Neurolution
 		testFile = new File(args[0]);
 		generations = Integer.parseInt(args[1]);
 		networkType = args[2];
+		crossoverChunk = args[3];
 		
 		problem = new Problem(testFile);
 		problem.splitIntoTrainAndTest();		// Split the problem into training and testing data
 		numAttr = problem.getNumAttributes();
 
 		// Creates, runs, and prints the results of our Genetic Algorithm
-		ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, networkType);
+		ga = new GA(NUM_IND, MUTATION_PROB, generations, CROSSOVER_PROB, NUM_INPUT, networkType, crossoverChunk);
 		ga.runGA(problem);
 		ga.printResults(args[0], problem.getNumProblems());   
 	}
